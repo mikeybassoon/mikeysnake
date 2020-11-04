@@ -20,7 +20,8 @@ function handleIndex(request, response) {
     author: 'mikeybassoon',
     color: '#992288',
     head: 'sand-worm',
-    tail: 'shac-coffee'
+    tail: 'shac-coffee',
+    version: "1.0.0"
   }
   response.status(200).json(battlesnakeInfo)
 }
@@ -50,3 +51,6 @@ function handleEnd(request, response) {
   console.log('END')
   response.status(200).send('ok')
 }
+
+
+// move logic functions
