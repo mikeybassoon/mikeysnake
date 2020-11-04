@@ -34,7 +34,18 @@ function handleStart(request, response) {
 }
 
 function handleMove(request, response) {
-  var gameData = request.body
+  var gameData = request.body;
+  var gameID = gameData.game.id;
+
+  var mySnake = function(gameData){
+    gameData.board.snakes.foreach(
+      if(this->name == 'Grabthar'){
+        return this;
+      }
+    );
+  }
+
+  console.log('Snake identified. ID: ' + mySnake.id);
 
   var possibleMoves = ['up', 'down', 'left', 'right']
   var move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]
@@ -51,6 +62,3 @@ function handleEnd(request, response) {
   console.log('END')
   response.status(200).send('ok')
 }
-
-
-// move logic functions
