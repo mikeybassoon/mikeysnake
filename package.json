@@ -1,7 +1,7 @@
 {
-  "name": "starter-snake-node",
+  "name": "Grabthar's Vengeance",
   "version": "1.0.0",
-  "description": "A simple Battlesnake written in JavaScript for Node.js",
+  "description": "Likes sunsets and long slithers on the beach.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BattlesnakeOfficial/starter-snake-node.git"
+    "url": "git+https://github.com/mikeybassoon/starter-snake-node.git"
   },
-  "author": "BattlesnakeOfficial",
+  "author": "BattlesnakeOfficial and mikeybassoon",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/BattlesnakeOfficial/starter-snake-node/issues"
+    "url": "https://github.com/mikeybassoon/starter-snake-node/issues"
   },
-  "homepage": "https://github.com/BattlesnakeOfficial/starter-snake-node#readme",
+  "homepage": "https://github.com/mikeybassoon/starter-snake-node#readme",
   "dependencies": {
     "express": "^4.17.1"
   }
