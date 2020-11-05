@@ -37,12 +37,19 @@ function handleMove(request, response) {
   var gameData = request.body;
   var gameID = gameData.game.id;
 
+
   var mySnake = function(gameData){
-    gameData.board.snakes.foreach(
-      if(this->name == 'Grabthar'){
-        return this;
+    var me;
+
+    function findMe(snake){
+      if(snake.name == 'Grabthar'){
+        me = snake;
       }
-    );
+    }
+
+    gameData.board.snakes.foreach(findMe(this));
+
+    return me;
   };
   console.log('Snake identified. ID: ' + mySnake.id);
 
