@@ -104,7 +104,7 @@ function handleMove(request, response) {
 
   var move;
   if(possibleMoves.length == 0){ // no legal move?
-    move = 'up'; // move up, game over anyway
+    move = 'left'; // move up, game over anyway
   } else
     move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]; // select a random legal move
 
