@@ -43,12 +43,70 @@ function handleMove(request, response) {
         return this;
       }
     );
-  }
-
+  };
   console.log('Snake identified. ID: ' + mySnake.id);
 
-  var possibleMoves = ['up', 'down', 'left', 'right']
-  var move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]
+  // identify valid directions for snake to travel
+  var possibleMoves = new Array;
+
+  var currentLocation = {
+    'x': mySnake.head.x,
+    'y': mySnake.head.y
+  };
+
+  // up?
+  if(mySnake.head.y != gameData.board.height - 1){ // can only move up if not on top row
+    var upLocation = {
+      'x': currentLocation.x,
+      'y': currectLocation.y + 1
+    };
+
+    if(spaceClear(upLocation, gameData.board)){ //
+      possibleMoves.push('up');
+    }
+  }
+
+  // left?
+  if(mySnake.head.x != 0){ // can only go left if not in leftmost row
+    var leftLocation = {
+      'x': currentLocation.x - 1,
+      'y': currentLocation.y
+    };
+
+    if(spaceClear(leftLocation, gameData.board)){
+      possibleMoves.push('left');
+    }
+  }
+
+  // down?
+  if(mySnake.head.y != 0){ // can only go down if not in lowest row
+    var downLocation = {
+      'x': currentLocation.x,
+      'y': currentLocation.y - 1
+    };
+
+    if(spaceClear(downLocation, gameData.board)){
+      possibleMoves.push('down');
+    }
+  }
+
+  // right?
+  if(mySnake.head.x != gameData.board.width - 1){ // can only move right if not in rightmost row
+    var rightLocation = {
+      'x': currentLocation.x + 1,
+      'y': currentLocation.y
+    };
+
+    if(spaceClear(rightLocation, gameData.board)){
+      possibleMoves.push('right');
+    }
+  }
+
+  var move;
+  if(possibleMoves.length == 0){ // no legal move?
+    move = 'up'; // move up, game over anyway
+  } else
+    move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]; // select a random legal move
 
   console.log('MOVE: ' + move)
   response.status(200).send({
@@ -61,4 +119,25 @@ function handleEnd(request, response) {
 
   console.log('END')
   response.status(200).send('ok')
+}
+
+// helper functions
+function spaceClear(coordinates, board){
+  board.hazards.foreach(
+    if(this->x == coordinates.x && this->y == coordinates.y){ // check if hazard in way
+      return false;
+    }
+  );
+  board.snakes.foreach(
+    if(this->head.x == coordinates.x && this->head.y == coordinates.y){ // check if snake head in way
+      return false;
+    }
+    this->body.foreach(
+      if(this->x == coordinates.x && this->y == coordinates.y){ // check each body segment to see if in way
+        return false;
+      }
+    );
+  );
+
+  return true;
 }
