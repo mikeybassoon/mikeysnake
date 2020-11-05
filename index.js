@@ -129,22 +129,65 @@ function handleEnd(request, response) {
 }
 
 // helper functions
-function spaceClear(coordinates, board){
-  board.hazards.foreach(
-    if(this->x == coordinates.x && this->y == coordinates.y){ // check if hazard in way
+
+/*
+  function sameCoordinates
+  Returns true if two sets of coordinates are the same
+  Else returns false
+*/
+function sameCoordinates(space_a, space_b){
+  if(space_a.x == space_b.x && space_a.y == space_b.y){
+    return true;
+  }
+  return false;
+}
+
+
+
+/*
+  function spaceClear
+  Checks if a given set of coordinates corresponds to a clear space on the board
+  Returns true if the space represents a valid move
+  Returns false if space obstructed/does not exist
+*/
+function spaceClear(targetCoordinates, board){
+
+  for(var i = 0; i < board.hazards.length; i++){
+    var thisHazard = board.hazards[i];
+    var hazardCoordinates = {
+      'x': thisHazard.x,
+      'y': thisHazard.y
+    };
+    if(sameCoordinates(hazardCoordinates, targetCoordinates)){
       return false;
     }
-  );
-  board.snakes.foreach(
-    if(this->head.x == coordinates.x && this->head.y == coordinates.y){ // check if snake head in way
+  }
+
+  for(var i = 0; i < board.snakes.length; i++){
+    var thisSnake = board.snakes[i];
+    var headCoordinates = {
+      'x': thisSnake.head.x,
+      'y': thisSnake.head.y
+    };
+
+    // check if a snake head in way
+    if(sameCoordinates(headCoordinates, targetCoordinates)){
       return false;
     }
-    this->body.foreach(
-      if(this->x == coordinates.x && this->y == coordinates.y){ // check each body segment to see if in way
+
+    // check if a snake body part is in way
+    for(var j = 0; j < thisSnake.body.length; j++){
+      var thisBodySegment = thisSnake.body[j];
+      var bodyCoordinates = {
+        'x': thisBodySegment.x,
+        'y': thisBodySegment.y
+      }
+
+      if(sameCoordinates(bodyCoordinates, targetCoordinates)){
         return false;
       }
-    );
-  );
+    }
+  }
 
   return true;
 }
