@@ -37,76 +37,132 @@ function handleStart(request, response) {
 
 function handleMove(request, response) {
   var gameData = request.body;
+  var board = gameData.board;
   var gameID = gameData.game.id;
-  var mySnake;
+  var mySnake; // info about player's snake
+  var hungry = false; // flag for when food finding becomes priority
+  var openSpaces = new Array; // array of unobstructed spaces
 
-  console.log('--MOVE gameID = ' + gameID);
-
-
+  // bind mySnake data to variable
   for(var i = 0; i < gameData.board.snakes.length; i++){
     if(gameData.board.snakes[i].name == 'Grabthar'){
       mySnake = gameData.board.snakes[i];
     }
   }
-  console.log('--Snake identified. ID: ' + mySnake.id);
 
+  // identify all open spaces on board
+  for(var x = 0; x < board.width; x++){
+    for(var y = 0; y < board.height; y++){
+      var thisSpace = {
+        'x': x,
+        'y': y
+      };
+
+      if(spaceClear(thisSpace, board)){
+        openSpaces.push(thisSpace);
+      }
+    }
+  }
+
+  console.log('--MOVE gameID = ' + gameID);
+  console.log('--Snake identified. ID: ' + mySnake.id);
   console.log('--Engaging move logic');
 
   // identify valid directions for snake to travel
   var possibleMoves = new Array;
 
+  // define all adjacent coordinates
+  // check if a cavern-free path is available for each
+
   var currentLocation = {
     'x': mySnake.head.x,
     'y': mySnake.head.y
   };
+  var upLocation = {
+    'x': currentLocation.x,
+    'y': currentLocation.y + 1
+  };
+  var leftLocation = {
+    'x': currentLocation.x - 1,
+    'y': currentLocation.y
+  };
+  var downLocation = {
+    'x': currentLocation.x,
+    'y': currentLocation.y - 1
+  };
+  var rightLocation = {
+    'x': currentLocation.x + 1,
+    'y': currentLocation.y
+  };
 
-  // up?
-  if(mySnake.head.y != gameData.board.height - 1){ // can only move up if not on top row
-    var upLocation = {
-      'x': currentLocation.x,
-      'y': currentLocation.y + 1
-    };
+  // assemble pathfinder object for recursive route finding
+  var pathfinder = {
+    'counter': 0,
+    'path': new Array,
+    'clear': openSpaces,
+    'targetValue': ESCAPE_ROUTE_SIZE
+  };
 
-    if(spaceClear(upLocation, gameData.board)){ //
-      possibleMoves.push('up');
+  if(currentLocation.y != board.height){
+    // package information for recursive pathfinding
+    pathfinder.x = upLocation.x;
+    pathfinder.y = uplocation.y;
+    if(cavernIsClear(pathfinder)){
+      possibleMoves.push(upLocation);
+    }
+  } else if(currentLocation.y ! = 0){
+    // package info
+    pathfinder.x = downLocation.x;
+    pathfinder.y = downLocation.y;
+    if(cavernIsClear(pathfinder)){
+      possibleMoves.push(downLocation);
+    }
+  } else if(currentLocation.x != board.width){
+    // package info
+    pathfinder.x = rightLocation.x;
+    pathfinder.y = rightLocation.y;
+    if(cavernisClear(pathfinder)){
+      possibleMoves.push(downLocation);
+    }
+  } else if(currentLocation.x ! = 0){
+    // package info
+    pathfinder.x = leftLocation.x;
+    pathfinder.y = leftLocation.y;
+    if(cavernIsClear(pathfinder)){
+      possibleMoves.push(downLocation);
+    }
+  } else{ // no unboxed route out? just find a legal adjacent space
+    // up?
+    if(currentLocation.y != board.height - 1){ // can only move up if not on top row
+      if(spaceClear(upLocation, board)){ //
+        possibleMoves.push('up');
+      }
+    }
+
+    // left?
+    if(currentLocation.x != 0){ // can only go left if not in leftmost row
+      if(spaceClear(leftLocation, board)){
+        possibleMoves.push('left');
+      }
+    }
+
+    // down?
+    if(currentLocation.y != 0){ // can only go down if not in lowest row
+      if(spaceClear(downLocation, board)){
+        possibleMoves.push('down');
+      }
+    }
+
+    // right?
+    if(currentLocation.x != board.width - 1){ // can only move right if not in rightmost row
+      if(spaceClear(rightLocation, board)){
+        possibleMoves.push('right');
+      }
     }
   }
 
-  // left?
-  if(mySnake.head.x != 0){ // can only go left if not in leftmost row
-    var leftLocation = {
-      'x': currentLocation.x - 1,
-      'y': currentLocation.y
-    };
+  // MAKE MOVE
 
-    if(spaceClear(leftLocation, gameData.board)){
-      possibleMoves.push('left');
-    }
-  }
-
-  // down?
-  if(mySnake.head.y != 0){ // can only go down if not in lowest row
-    var downLocation = {
-      'x': currentLocation.x,
-      'y': currentLocation.y - 1
-    };
-
-    if(spaceClear(downLocation, gameData.board)){
-      possibleMoves.push('down');
-    }
-  }
-
-  // right?
-  if(mySnake.head.x != gameData.board.width - 1){ // can only move right if not in rightmost row
-    var rightLocation = {
-      'x': currentLocation.x + 1,
-      'y': currentLocation.y
-    };
-
-    if(spaceClear(rightLocation, gameData.board)){
-      possibleMoves.push('right');
-    }
-  }
 
   var move;
   if(possibleMoves.length == 0){ // no legal move?
@@ -210,6 +266,10 @@ function spaceClear(targetCoordinates, board){
   Returns true if a route can be found of specified minimum size, else returns false
 */
 function cavernIsClear(pathfinder){
+  var currentSpace = {
+    'x': pathfinder.x,
+    'y': pathfinder.y
+  };
   var currentCount = pathfinder.counter;
   var currentPath = pathfinder.path;
   var clearSpaces = pathfinder.clear;
@@ -221,7 +281,40 @@ function cavernIsClear(pathfinder){
   }
 
   // identify all clear spaces adjacent to start point
-  // array search function?
+  // check if space above free
+  var upSpace = {
+    'x': currentSpace.x,
+    'y': currentSpace.y + 1
+  };
+  if(isClear(upSpace, clearSpaces)){ // if space above clear
+    legalNextMoves.push(upSpace);
+  }
+
+  // check if space below free
+  var downSpace = {
+    'x': currentSpace.x,
+    'y': currentspace.y - 1
+  };
+  if(isClear)downSpace, clearSpaces)){
+    legalNextMoves.push(downSpace);
+  }
+
+  // check if space to left free
+  var leftSpace ={
+    'x': currentSpace.x - 1,
+    'y': currentSpace.y
+  };
+  if(isClear(leftSpace, clearSpaces)){
+    legalNextMoves.push(leftSpace);
+  }
+
+  var rightSpace = {
+    'x': currentSpace.x + 1,
+    'y': currentSpace.y
+  };
+  if(isClear(rightSpace, clearSpaces)){
+    legalNextMoves.push(rightSpace);
+  }
 
   // if no clear spaces, return false
   if(legalNextMoves.length = 0){
@@ -250,5 +343,28 @@ function cavernIsClear(pathfinder){
   }
 
   // no clear path out found?
+  return false;
+}
+
+
+/*
+  function isClear()
+
+  parameters:
+    <1> {x, y} coordinates of space being checked
+    <2> array of {x, y} coordinates with no obstruction
+
+  Returns true if space being checked is on the list of free spaces
+  Else returns false
+*/
+
+function isClear(checkSpace, clearSpaces){
+  for(var i = 0; i < clearSpaces.length; i++){
+    if(checkSpace.x == clearSpaces[i].x && checkSpace.y == clearSpaces[i].y){
+      return true;
+    }
+  }
+
+  // no match in clearSpaces list?
   return false;
 }
