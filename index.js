@@ -129,7 +129,7 @@ function handleMove(request, response) {
     pathfinder.x = leftLocation.x;
     pathfinder.y = leftLocation.y;
     if(cavernIsClear(pathfinder)){
-      possibleMoves.push('left'');
+      possibleMoves.push('left');
     }
   } else{ // no unboxed route out? just find a legal adjacent space
     // up?
