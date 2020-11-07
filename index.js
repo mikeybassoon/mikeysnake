@@ -123,7 +123,7 @@ function handleMove(request, response) {
     // package info
     pathfinder.x = rightLocation.x;
     pathfinder.y = rightLocation.y;
-    if(cavernisClear(pathfinder)){
+    if(cavernIsClear(pathfinder)){
       possibleMoves.push('right');
     }
   }
