@@ -110,7 +110,7 @@ function handleMove(request, response) {
     if(cavernIsClear(pathfinder)){
       possibleMoves.push(upLocation);
     }
-  } else if(currentLocation.y ! = 0){
+  } else if(currentLocation.y != 0){
     // package info
     pathfinder.x = downLocation.x;
     pathfinder.y = downLocation.y;
