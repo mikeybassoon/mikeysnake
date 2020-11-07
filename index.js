@@ -60,7 +60,7 @@ function handleMove(request, response) {
   if(mySnake.head.y != gameData.board.height - 1){ // can only move up if not on top row
     var upLocation = {
       'x': currentLocation.x,
-      'y': currectLocation.y + 1
+      'y': currentLocation.y + 1
     };
 
     if(spaceClear(upLocation, gameData.board)){ //
