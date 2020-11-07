@@ -1,0 +1,38 @@
+1.0.0 - COMPLETE November 7
+  Identify snake's own unique ID
+  Snake will check all possible moves to see if they are legal
+    If no legal move, go left
+  Snake will randomly select a direction from legal directions
+
+1.0.1
+  New expression of routing algorithm
+    Upon receipt of board, make list of all unobstructed spaces
+
+  Check if there is a set path for the snake to follow
+    If yes, check if anything in that path is obstructed
+
+1.0.2
+  Rudimentary algorithm to avoid getting boxed in
+    If cavern not large enough, do not enter
+
+1.0.3
+  If snake's health < 30
+    Identify closest food
+    Call Destination(food_coordinates, current_coordinates
+  Else proceed with random move
+    If a square has food in it, it is not considered a valid move unless all other routes are blocked
+  Destination algorithm(dest_coordinates, current_coordinates)
+    Calculate X and Y distances to target
+    If either X or Y !=0
+      If X blocked
+        If Y blocked
+          If only route out blocked
+            Go random direction
+          Else go remaining direction
+        Else move Y
+      Else move X
+
+1.0.4
+  Update random path selection to turn away from the closest snake
+
+1.0.5

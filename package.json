@@ -1,0 +1,23 @@
+{
+  "name": "Grabthar",
+  "version": "1.0.0",
+  "description": "Likes sunsets and long slithers on the beach.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikeybassoon/starter-snake-node.git"
+  },
+  "author": "BattlesnakeOfficial and mikeybassoon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mikeybassoon/starter-snake-node/issues"
+  },
+  "homepage": "https://github.com/mikeybassoon/starter-snake-node#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
