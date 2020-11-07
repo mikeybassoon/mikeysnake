@@ -104,12 +104,16 @@ function handleMove(request, response) {
     'targetValue': ESCAPE_ROUTE_SIZE
   };
 
+  console.log('----Checking for possible escape routes...');
+
   if(currentLocation.y != board.height){
     // package information for recursive pathfinding
     pathfinder.x = upLocation.x;
     pathfinder.y = upLocation.y;
     if(cavernIsClear(pathfinder)){
-      possibleMoves.push('up');
+      if(!possibleMoves.includes('up')){
+        possibleMoves.push('up');
+      }
     }
   }
   if(currentLocation.y != 0){
@@ -117,7 +121,9 @@ function handleMove(request, response) {
     pathfinder.x = downLocation.x;
     pathfinder.y = downLocation.y;
     if(cavernIsClear(pathfinder)){
-      possibleMoves.push('down');
+      if(!possibleMoves.includes('down')){
+        possibleMoves.push('down');
+      }
     }
   }
   if(currentLocation.x != board.width){
@@ -125,7 +131,9 @@ function handleMove(request, response) {
     pathfinder.x = rightLocation.x;
     pathfinder.y = rightLocation.y;
     if(cavernIsClear(pathfinder)){
-      possibleMoves.push('right');
+      if(!possibleMoves.includes('right')){
+        possibleMoves.push('right');
+      }
     }
   }
   if(currentLocation.x != 0){
@@ -133,14 +141,17 @@ function handleMove(request, response) {
     pathfinder.x = leftLocation.x;
     pathfinder.y = leftLocation.y;
     if(cavernIsClear(pathfinder)){
-      possibleMoves.push('left');
+      if(!possibleMoves.includes('left')){
+        possibleMoves.push('left');
+      }
     }
   }
-
-
   // no move found yet that works?
   if(possibleMoves.length == 0){
     console.log('----No escape route available!');
+
+    // find any open square to move into
+
     if(currentLocation.y != board.height - 1){ // can only move up if not on top row
       if(spaceClear(upLocation, board)){ //
         possibleMoves.push('up');
@@ -175,7 +186,7 @@ function handleMove(request, response) {
 
   var move;
   if(possibleMoves.length == 0){ // no legal move?
-    console.log('No legal move available!');
+    console.log('==No legal move available!');
     move = 'left'; // move up, game over anyway
   } else
     move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]; // select a random legal move
