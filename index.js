@@ -295,7 +295,7 @@ function cavernIsClear(pathfinder){
     'x': currentSpace.x,
     'y': currentspace.y - 1
   };
-  if(isClear)downSpace, clearSpaces)){
+  if(isClear(downSpace, clearSpaces)){
     legalNextMoves.push(downSpace);
   }
 
