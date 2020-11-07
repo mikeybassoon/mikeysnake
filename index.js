@@ -36,21 +36,16 @@ function handleStart(request, response) {
 function handleMove(request, response) {
   var gameData = request.body;
   var gameID = gameData.game.id;
+  var mySnake;
+
+  console.log('--MOVE gameID = ' + gameID);
 
 
-  var mySnake = function(gameData){
-    var me;
-
-    function findMe(snake){
-      if(snake.name == 'Grabthar'){
-        me = snake;
-      }
+  for(var i = 0; i < gameData.board.snakes.length; i++){
+    if(gameData.board.snakes[i].name == 'Grabthar'){
+      mySnake = gameData.board.snakes[i];
     }
-
-    gameData.board.snakes.foreach(findMe(this));
-
-    return me;
-  };
+  }
   console.log('Snake identified. ID: ' + mySnake.id);
 
   // identify valid directions for snake to travel
