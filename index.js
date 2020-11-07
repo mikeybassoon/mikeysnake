@@ -286,10 +286,13 @@ function spaceClear(targetCoordinates, board){
   Returns true if a route can be found of specified minimum size, else returns false
 */
 function cavernIsClear(pathfinder){
+  console.log('==Entering cavernIsClear function');
   var currentSpace = {
     'x': pathfinder.x,
     'y': pathfinder.y
   };
+
+  console.log('==Current location: ' + currentSpace.x + ', ' + currentSpace.y);
   var currentCount = pathfinder.counter;
   var currentPath = pathfinder.path;
   var clearSpaces = pathfinder.clear;
