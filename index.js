@@ -124,7 +124,7 @@ function handleMove(request, response) {
     if(cavernisClear(pathfinder)){
       possibleMoves.push(downLocation);
     }
-  } else if(currentLocation.x ! = 0){
+  } else if(currentLocation.x != 0){
     // package info
     pathfinder.x = leftLocation.x;
     pathfinder.y = leftLocation.y;
