@@ -106,7 +106,7 @@ function handleMove(request, response) {
   if(currentLocation.y != board.height){
     // package information for recursive pathfinding
     pathfinder.x = upLocation.x;
-    pathfinder.y = uplocation.y;
+    pathfinder.y = upLocation.y;
     if(cavernIsClear(pathfinder)){
       possibleMoves.push(upLocation);
     }
