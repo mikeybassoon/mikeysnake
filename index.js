@@ -110,29 +110,35 @@ function handleMove(request, response) {
     if(cavernIsClear(pathfinder)){
       possibleMoves.push('up');
     }
-  } else if(currentLocation.y != 0){
+  }
+  if(currentLocation.y != 0){
     // package info
     pathfinder.x = downLocation.x;
     pathfinder.y = downLocation.y;
     if(cavernIsClear(pathfinder)){
       possibleMoves.push('down');
     }
-  } else if(currentLocation.x != board.width){
+  }
+  if(currentLocation.x != board.width){
     // package info
     pathfinder.x = rightLocation.x;
     pathfinder.y = rightLocation.y;
     if(cavernisClear(pathfinder)){
       possibleMoves.push('right');
     }
-  } else if(currentLocation.x != 0){
+  }
+  if(currentLocation.x != 0){
     // package info
     pathfinder.x = leftLocation.x;
     pathfinder.y = leftLocation.y;
     if(cavernIsClear(pathfinder)){
       possibleMoves.push('left');
     }
-  } else{ // no unboxed route out? just find a legal adjacent space
-    // up?
+  }
+
+  // no move found yet that works?
+  console.log('No escape route available!');
+  if(possibleMoves.length == 0){
     if(currentLocation.y != board.height - 1){ // can only move up if not on top row
       if(spaceClear(upLocation, board)){ //
         possibleMoves.push('up');
@@ -160,6 +166,7 @@ function handleMove(request, response) {
       }
     }
   }
+
 
   // MAKE MOVE
 
