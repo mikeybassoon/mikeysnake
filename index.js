@@ -293,7 +293,7 @@ function cavernIsClear(pathfinder){
   // check if space below free
   var downSpace = {
     'x': currentSpace.x,
-    'y': currentspace.y - 1
+    'y': currentSpace.y - 1
   };
   if(isClear(downSpace, clearSpaces)){
     legalNextMoves.push(downSpace);
