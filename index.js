@@ -13,6 +13,8 @@ app.post('/end', handleEnd)
 
 app.listen(PORT, () => console.log(`Battlesnake Server listening at http://127.0.0.1:${PORT}`))
 
+const ESCAPE_ROUTE_SIZE = 10; // default size of cavern required to make a move legal
+
 
 function handleIndex(request, response) {
   var battlesnakeInfo = {
@@ -21,7 +23,7 @@ function handleIndex(request, response) {
     color: '#992288',
     head: 'sand-worm',
     tail: 'shac-coffee',
-    version: "1.0.0"
+    version: "1.0.1"
   }
   response.status(200).json(battlesnakeInfo)
 }
@@ -46,7 +48,9 @@ function handleMove(request, response) {
       mySnake = gameData.board.snakes[i];
     }
   }
-  console.log('Snake identified. ID: ' + mySnake.id);
+  console.log('--Snake identified. ID: ' + mySnake.id);
+
+  console.log('--Engaging move logic');
 
   // identify valid directions for snake to travel
   var possibleMoves = new Array;
@@ -106,6 +110,7 @@ function handleMove(request, response) {
 
   var move;
   if(possibleMoves.length == 0){ // no legal move?
+    console.log('No legal move available!');
     move = 'left'; // move up, game over anyway
   } else
     move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]; // select a random legal move
@@ -129,6 +134,8 @@ function handleEnd(request, response) {
   function sameCoordinates
   Returns true if two sets of coordinates are the same
   Else returns false
+
+  Precondition: both coordinates must have attributes 'x' and 'y'
 */
 function sameCoordinates(space_a, space_b){
   if(space_a.x == space_b.x && space_a.y == space_b.y){
@@ -185,4 +192,63 @@ function spaceClear(targetCoordinates, board){
   }
 
   return true;
+}
+
+/*
+  function cavernIsClear
+
+  CAUTION! Recursive!
+
+  Parameters:
+    <1> Pathfinder object containing:
+      - x, y: coordinates of start point
+      - array of clear spaces on the board
+      - array of steps taken to reach this point
+      - a counter value
+      - the target value
+
+  Returns true if a route can be found of specified minimum size, else returns false
+*/
+function cavernIsClear(pathfinder){
+  var currentCount = pathfinder.counter;
+  var currentPath = pathfinder.path;
+  var clearSpaces = pathfinder.clear;
+  var legalNextMoves = new Array;
+
+  currentCount++; // increment length counter for current route
+  if(currentCount == pathfinder.targetValue){ // target length reached?
+    return true;
+  }
+
+  // identify all clear spaces adjacent to start point
+  // array search function?
+
+  // if no clear spaces, return false
+  if(legalNextMoves.length = 0){
+    return false;
+  }
+
+  // for each clear space:
+  for(var i = 0; i < legalNextMoves.length; i++){
+    var nextMove = legalNextMoves[i];
+    // package pathfinder object for next stage in function call
+    var nextStep = {
+      'x': nextMove.x,
+      'y': nextMove.y,
+
+      // REMOVE START POINT FROM THE CLEAR SPACES ARRAY
+      // BUILD THE CLEAR SPACES ARRAY
+
+      'path': currentPath.push({'x': nextMove.x, 'y': nextMove.y}),
+      'counter': currentCount,
+      'targetValue': pathfinder.targetValue
+    };
+
+    if(cavernIsClear(nextStep)){
+      return true;
+    }
+  }
+
+  // no clear path out found?
+  return false;
 }
