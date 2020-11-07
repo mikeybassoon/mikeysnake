@@ -65,6 +65,7 @@ function handleMove(request, response) {
   }
 
   console.log('--MOVE gameID = ' + gameID);
+  console.log('--TURN: ' + gameData.turn);
   console.log('--Snake identified. ID: ' + mySnake.id);
   console.log('--Engaging move logic');
 
