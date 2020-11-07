@@ -104,7 +104,7 @@ function handleMove(request, response) {
     'targetValue': ESCAPE_ROUTE_SIZE
   };
 
-  console.log('----Checking for possible escape routes...');
+  console.log('===Checking for possible escape routes...');
 
   if(currentLocation.y != board.height){
     // package information for recursive pathfinding
@@ -148,7 +148,7 @@ function handleMove(request, response) {
   }
   // no move found yet that works?
   if(possibleMoves.length == 0){
-    console.log('----No escape route available!');
+    console.log('===No escape route available!');
 
     // find any open square to move into
 
