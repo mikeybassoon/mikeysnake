@@ -137,9 +137,10 @@ function handleMove(request, response) {
     }
   }
 
+
   // no move found yet that works?
-  console.log('No escape route available!');
   if(possibleMoves.length == 0){
+    console.log('----No escape route available!');
     if(currentLocation.y != board.height - 1){ // can only move up if not on top row
       if(spaceClear(upLocation, board)){ //
         possibleMoves.push('up');
