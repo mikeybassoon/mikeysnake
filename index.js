@@ -108,28 +108,28 @@ function handleMove(request, response) {
     pathfinder.x = upLocation.x;
     pathfinder.y = upLocation.y;
     if(cavernIsClear(pathfinder)){
-      possibleMoves.push(upLocation);
+      possibleMoves.push('up');
     }
   } else if(currentLocation.y != 0){
     // package info
     pathfinder.x = downLocation.x;
     pathfinder.y = downLocation.y;
     if(cavernIsClear(pathfinder)){
-      possibleMoves.push(downLocation);
+      possibleMoves.push('down');
     }
   } else if(currentLocation.x != board.width){
     // package info
     pathfinder.x = rightLocation.x;
     pathfinder.y = rightLocation.y;
     if(cavernisClear(pathfinder)){
-      possibleMoves.push(downLocation);
+      possibleMoves.push('right');
     }
   } else if(currentLocation.x != 0){
     // package info
     pathfinder.x = leftLocation.x;
     pathfinder.y = leftLocation.y;
     if(cavernIsClear(pathfinder)){
-      possibleMoves.push(downLocation);
+      possibleMoves.push('left'');
     }
   } else{ // no unboxed route out? just find a legal adjacent space
     // up?
