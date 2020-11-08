@@ -206,8 +206,8 @@ function handleEnd(request, response) {
 
 // helper functions
 
-/*
-  function sameCoordinates
+/*  function sameCoordinates
+
   Returns true if two sets of coordinates are the same
   Else returns false
 
@@ -220,10 +220,8 @@ function sameCoordinates(space_a, space_b){
   return false;
 }
 
+/*  function spaceClear
 
-
-/*
-  function spaceClear
   Checks if a given set of coordinates corresponds to a clear space on the board
   Returns true if the space represents a valid move
   Returns false if space obstructed/does not exist
@@ -270,108 +268,7 @@ function spaceClear(targetCoordinates, board){
   return true;
 }
 
-/*
-  function cavernIsClear
-
-  CAUTION! Recursive!
-
-  Parameters:
-    <1> Pathfinder object containing:
-      - x, y: coordinates of start point
-      - array of clear spaces on the board
-      - array of steps taken to reach this point
-      - a counter value
-      - the target value
-
-  Returns true if a route can be found of specified minimum size, else returns false
-*/
-function cavernIsClear(pathfinder){
-  console.log('==Entering cavernIsClear function');
-  var currentSpace = {
-    'x': pathfinder.x,
-    'y': pathfinder.y
-  };
-
-  console.log('==Current location: ' + currentSpace.x + ', ' + currentSpace.y);
-  var currentCount = pathfinder.counter;
-  var currentPath = pathfinder.path;
-  var clearSpaces = pathfinder.clear;
-  var legalNextMoves = new Array;
-
-  currentCount++; // increment length counter for current route
-  if(currentCount == pathfinder.targetValue){ // target length reached?
-    return true;
-  }
-
-  // identify all clear spaces adjacent to start point
-  // check if space above free
-  var upSpace = {
-    'x': currentSpace.x,
-    'y': currentSpace.y + 1
-  };
-  if(isClear(upSpace, clearSpaces)){ // if space above clear
-    legalNextMoves.push(upSpace);
-  }
-
-  // check if space below free
-  var downSpace = {
-    'x': currentSpace.x,
-    'y': currentSpace.y - 1
-  };
-  if(isClear(downSpace, clearSpaces)){
-    legalNextMoves.push(downSpace);
-  }
-
-  // check if space to left free
-  var leftSpace ={
-    'x': currentSpace.x - 1,
-    'y': currentSpace.y
-  };
-  if(isClear(leftSpace, clearSpaces)){
-    legalNextMoves.push(leftSpace);
-  }
-
-  var rightSpace = {
-    'x': currentSpace.x + 1,
-    'y': currentSpace.y
-  };
-  if(isClear(rightSpace, clearSpaces)){
-    legalNextMoves.push(rightSpace);
-  }
-
-  // if no clear spaces, return false
-  if(legalNextMoves.length = 0){
-    return false;
-  }
-
-  // for each clear space:
-  for(var i = 0; i < legalNextMoves.length; i++){
-    var nextMove = legalNextMoves[i];
-    // package pathfinder object for next stage in function call
-    var nextStep = {
-      'x': nextMove.x,
-      'y': nextMove.y,
-
-      // REMOVE START POINT FROM THE CLEAR SPACES ARRAY
-      // BUILD THE CLEAR SPACES ARRAY
-
-      'path': currentPath.push({'x': nextMove.x, 'y': nextMove.y}),
-      'counter': currentCount,
-      'targetValue': pathfinder.targetValue
-    };
-
-    if(cavernIsClear(nextStep)){
-      return true;
-    }
-  }
-
-  // no clear path out found?
-  return false;
-}
-
-
-/*
-  function isClear()
+/*  function isClear()
 
   parameters:
     <1> {x, y} coordinates of space being checked
