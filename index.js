@@ -48,7 +48,7 @@ function handleMove(request, response) {
   console.log('--MOVE gameID = ' + gameID);
   console.log('--TURN: ' + gameData.turn);
   console.log('--Snake identified. ID: ' + mySnake.id);
-  console.log('--Engaging move logic');
+  console.log(`--Engaging move logic - current coordinates \[${mySnake.head.x}, ${mySnake.head.y}\]`);
 
   // identify valid directions for snake to travel
   var possibleMoves = new Array;
@@ -81,25 +81,25 @@ function handleMove(request, response) {
   // identify available spaces to move into
 
   // up?
-  if(isClear(upLocation, board)){
+  if(isClear(upLocation, openSpaces)){
     console.log('--Up is valid direction');
     possibleMoves.push('up');
   }
 
   // left?
-  if(isClear(leftLocation, board)){
+  if(isClear(leftLocation, openSpaces)){
     console.log('--Left is valid direction');
     possibleMoves.push('left');
   }
 
   // down?
-  if(isClear(downLocation, board)){
+  if(isClear(downLocation, openSpaces)){
     console.log('--Down is valid direction');
     possibleMoves.push('down');
   }
 
   // right?
-  if(isClear(rightLocation, board)){
+  if(isClear(rightLocation, openSpaces)){
     console.log('--Right is valid direction');
     possibleMoves.push('right');
   }
@@ -220,10 +220,8 @@ function isClear(checkSpace, clearSpaces){
   Returns true if occupied, else returns false
 */
 function spaceOccupied(checkSpace, board){
-  console.log('>--Entering spaceOccupied');
   for(var i = 0; i < board.hazards.length; i++){
-    if(checkSpace.x == board.hazards[i].x && checkSpace.y == board.hazards[i].y){
-      console.log(`>--Exiting spaceOccupied - \[${checkSpace.x}, ${checkSpace.y}\] occupied`);
+    if(checkSpace.x == board.hazards[i].x && checkSpace.y == board.hazards[i].y){;
       return true;
     }
   }
