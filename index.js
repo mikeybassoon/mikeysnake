@@ -75,56 +75,6 @@ function handleMove(request, response) {
     'y': currentLocation.y
   };
 
-  // assemble pathfinder object for recursive route finding
-  var pathfinder = {
-    'counter': 0,
-    'path': new Array,
-    'clear': openSpaces,
-    'targetValue': ESCAPE_ROUTE_SIZE
-  };
-
-  console.log('===Checking for possible escape routes...');
-
-  if(currentLocation.y != board.height){
-    // package information for recursive pathfinding
-    pathfinder.x = upLocation.x;
-    pathfinder.y = upLocation.y;
-    if(cavernIsClear(pathfinder)){
-      if(!possibleMoves.includes('up')){
-        possibleMoves.push('up');
-      }
-    }
-  }
-  if(currentLocation.y != 0){
-    // package info
-    pathfinder.x = downLocation.x;
-    pathfinder.y = downLocation.y;
-    if(cavernIsClear(pathfinder)){
-      if(!possibleMoves.includes('down')){
-        possibleMoves.push('down');
-      }
-    }
-  }
-  if(currentLocation.x != board.width){
-    // package info
-    pathfinder.x = rightLocation.x;
-    pathfinder.y = rightLocation.y;
-    if(cavernIsClear(pathfinder)){
-      if(!possibleMoves.includes('right')){
-        possibleMoves.push('right');
-      }
-    }
-  }
-  if(currentLocation.x != 0){
-    // package info
-    pathfinder.x = leftLocation.x;
-    pathfinder.y = leftLocation.y;
-    if(cavernIsClear(pathfinder)){
-      if(!possibleMoves.includes('left')){
-        possibleMoves.push('left');
-      }
-    }
-  }
   // no move found yet that works?
   if(possibleMoves.length == 0){
     console.log('===No escape route available!');
