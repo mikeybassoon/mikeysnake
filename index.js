@@ -81,22 +81,26 @@ function handleMove(request, response) {
   // identify available spaces to move into
 
   // up?
-  if(isClear(upLocation, board)){ //
+  if(isClear(upLocation, board)){
+    console.log('--Up is valid direction');
     possibleMoves.push('up');
   }
 
   // left?
   if(isClear(leftLocation, board)){
+    console.log('--Left is valid direction');
     possibleMoves.push('left');
   }
 
   // down?
   if(isClear(downLocation, board)){
+    console.log('--Down is valid direction');
     possibleMoves.push('down');
   }
 
   // right?
   if(isClear(rightLocation, board)){
+    console.log('--Right is valid direction');
     possibleMoves.push('right');
   }
 
