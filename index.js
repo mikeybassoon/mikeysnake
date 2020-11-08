@@ -40,30 +40,8 @@ function handleMove(request, response) {
   var gameData = request.body;
   var board = gameData.board;
   var gameID = gameData.game.id;
-  var mySnake; // info about player's snake
-  var hungry = false; // flag for when food finding becomes priority
-  var openSpaces = new Array; // array of unobstructed spaces
-
-  // bind mySnake data to variable
-  for(var i = 0; i < gameData.board.snakes.length; i++){
-    if(gameData.board.snakes[i].name == 'Grabthar'){
-      mySnake = gameData.board.snakes[i];
-    }
-  }
-
-  // identify all open spaces on board
-  for(var x = 0; x < board.width; x++){
-    for(var y = 0; y < board.height; y++){
-      var thisSpace = {
-        'x': x,
-        'y': y
-      };
-
-      if(spaceClear(thisSpace, board)){
-        openSpaces.push(thisSpace);
-      }
-    }
-  }
+  var mySnake = gameData.you; // info about player's snake
+  var openSpaces = buildClearSpaceArray(board); // array of unobstructed spaces
 
   console.log('--MOVE gameID = ' + gameID);
   console.log('--TURN: ' + gameData.turn);
@@ -235,56 +213,33 @@ function sameCoordinates(space_a, space_b){
   return false;
 }
 
-/*  function spaceClear
-
-  Checks if a given set of coordinates corresponds to a clear space on the board
-  Returns true if the space represents a valid move
-  Returns false if space obstructed/does not exist
+/*  function buildClearSpaceArray
+  Constructs an array of all unobstructed coordinates on the board
+  Parameters:
+    <1> Board object
+  Returns the array
 */
-function spaceClear(targetCoordinates, board){
+function buildClearSpaceArray(board){
+  var clearSpaces = new Array;
 
-  for(var i = 0; i < board.hazards.length; i++){
-    var thisHazard = board.hazards[i];
-    var hazardCoordinates = {
-      'x': thisHazard.x,
-      'y': thisHazard.y
-    };
-    if(sameCoordinates(hazardCoordinates, targetCoordinates)){
-      return false;
-    }
-  }
-
-  for(var i = 0; i < board.snakes.length; i++){
-    var thisSnake = board.snakes[i];
-    var headCoordinates = {
-      'x': thisSnake.head.x,
-      'y': thisSnake.head.y
-    };
-
-    // check if a snake head in way
-    if(sameCoordinates(headCoordinates, targetCoordinates)){
-      return false;
-    }
-
-    // check if a snake body part is in way
-    for(var j = 0; j < thisSnake.body.length; j++){
-      var thisBodySegment = thisSnake.body[j];
-      var bodyCoordinates = {
-        'x': thisBodySegment.x,
-        'y': thisBodySegment.y
-      }
-
-      if(sameCoordinates(bodyCoordinates, targetCoordinates)){
-        return false;
+  for(var x = 0; x < board.width; x++){
+    for(var y = 0; y < board.height; y++){
+      var coordinates = {
+        'x': x,
+        'y': y
+      };
+      if(!spaceOccupied(coordinates, board)){
+        clearSpaces.push(coordinates);
       }
     }
   }
 
-  return true;
+  return clearSpaces;
 }
 
 /*  function isClear
-  parameters:
+  Checks if a single space is on the list of unobstructed spaces
+  Parameters:
     <1> {x, y} coordinates of space being checked
     <2> array of {x, y} coordinates with no obstruction
   Returns true if space being checked is on the list of free spaces
@@ -300,4 +255,27 @@ function isClear(checkSpace, clearSpaces){
 
   // no match in clearSpaces list?
   return false;
+}
+
+/* function spaceOccupied
+  Checks if a space is currently occupied by a hazard or snake
+  Parameters:
+    <1> {x, y} coordinates of space to be checked
+    <2> Board object
+  Returns true if occupied, else returns false
+*/
+
+function spaceOccupied(checkSpace, board){
+  for(var i = 0; i < hazards.length; i++){
+    if(checkSpace.x == hazards[i].x && checkSpace.y == hazards[i].y){
+      return true;
+    }
+  }
+  for(var i = 0; i < snakes.length; i++){
+    for(var j = 0; j < snakes[i].length; j++){
+      if(checkSpace.x == snakes[i].body[j].x && checkSpace y == snakes[i].body[j].y){
+        return true;
+      }
+    }
+  }
 }
