@@ -207,8 +207,8 @@ function isClear(checkSpace, clearSpaces){
   Returns true if occupied, else returns false
 */
 function spaceOccupied(checkSpace, board){
-  for(var i = 0; i < hazards.length; i++){
-    if(checkSpace.x == hazards[i].x && checkSpace.y == hazards[i].y){
+  for(var i = 0; i < board.hazards.length; i++){
+    if(checkSpace.x == board.hazards[i].x && checkSpace.y == board.hazards[i].y){
       return true;
     }
   }
