@@ -15,6 +15,7 @@ app.listen(PORT, () => console.log(`Battlesnake Server listening at http://127.0
 
 const ESCAPE_ROUTE_SIZE = 10; // default size of cavern required to make a move legal
 
+// http request handler functions
 
 function handleIndex(request, response) {
   var battlesnakeInfo = {
@@ -206,6 +207,20 @@ function handleEnd(request, response) {
 
 // helper functions
 
+/* function timeToEat
+  Parameter:
+    <1> Snake object representing self
+  Returns true if your snake needs to make locating food a priority
+  Else returns false
+*/
+function timeToEat(snake){
+  const HUNGRY_TIME = 20;
+  if(snake.health < HUNGRY_TIME){
+    return true;
+  }
+  return false;
+}
+
 /*  function sameCoordinates
 
   Returns true if two sets of coordinates are the same
@@ -268,12 +283,10 @@ function spaceClear(targetCoordinates, board){
   return true;
 }
 
-/*  function isClear()
-
+/*  function isClear
   parameters:
     <1> {x, y} coordinates of space being checked
     <2> array of {x, y} coordinates with no obstruction
-
   Returns true if space being checked is on the list of free spaces
   Else returns false
 */
