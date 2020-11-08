@@ -212,9 +212,9 @@ function spaceOccupied(checkSpace, board){
       return true;
     }
   }
-  for(var i = 0; i < snakes.length; i++){
-    for(var j = 0; j < snakes[i].length; j++){
-      if(checkSpace.x == snakes[i].body[j].x && checkSpace.y == snakes[i].body[j].y){
+  for(var i = 0; i < board.snakes.length; i++){
+    for(var j = 0; j < board.snakes[i].length; j++){
+      if(checkSpace.x == board.snakes[i].body[j].x && checkSpace.y == board.snakes[i].body[j].y){
         return true;
       }
     }
