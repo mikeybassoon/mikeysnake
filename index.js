@@ -140,9 +140,12 @@ function handleEnd(request, response) {
   Else returns false
 */
 function timeToEat(snake){
+  console.log('>--Inside timeToEat()');
   if(snake.health < HUNGRY_TIME){
     return true;
   }
+
+  console.log('>--Exiting timeToEat()');
   return false;
 }
 
@@ -154,9 +157,12 @@ function timeToEat(snake){
   Precondition: both coordinates must have attributes 'x' and 'y'
 */
 function sameCoordinates(space_a, space_b){
+  console.log('>--Inside sameCoordinates()');
   if(space_a.x == space_b.x && space_a.y == space_b.y){
     return true;
   }
+
+  console.log('>--Exiting sameCoordinates()');
   return false;
 }
 
@@ -193,13 +199,16 @@ function buildClearSpaceArray(board){
   Else returns false
 */
 function isClear(checkSpace, clearSpaces){
+  console.log('>--Entering isClear()');
   for(var i = 0; i < clearSpaces.length; i++){
     if(checkSpace.x == clearSpaces[i].x && checkSpace.y == clearSpaces[i].y){
+      console.log(`>--Exiting isClear() - \[${checkSpace.x}, ${checkSpace.y}\] is clear`);
       return true;
     }
   }
 
   // no match in clearSpaces list?
+  console.log(`>--Exiting isClear() - \[${checkSpace.x}, ${checkSpace.y}\] is not clear`);
   return false;
 }
 
@@ -211,16 +220,21 @@ function isClear(checkSpace, clearSpaces){
   Returns true if occupied, else returns false
 */
 function spaceOccupied(checkSpace, board){
+  console.log('>--Entering spaceOccupied');
   for(var i = 0; i < board.hazards.length; i++){
     if(checkSpace.x == board.hazards[i].x && checkSpace.y == board.hazards[i].y){
+      console.log(`>--Exiting spaceOccupied - \[${checkSpace.x}, ${checkSpace.y}\] occupied`);
       return true;
     }
   }
   for(var i = 0; i < board.snakes.length; i++){
     for(var j = 0; j < board.snakes[i].length; j++){
       if(checkSpace.x == board.snakes[i].body[j].x && checkSpace.y == board.snakes[i].body[j].y){
+        console.log(`>--Exiting spaceOccupied - \[${checkSpace.x}, ${checkSpace.y}\] occupied`);
         return true;
       }
     }
   }
+  console.log(`>--Exiting spaceOccupied - \[${checkSpace.x}, ${checkSpace.y}\] not occupied`);
+  return false;
 }
