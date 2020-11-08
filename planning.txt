@@ -4,9 +4,17 @@
     If no legal move, go left
   Snake will randomly select a direction from legal directions
 
-1.0.1
+1.0.1 - COMPLETE November 8
   Snake has hunger status
     - Limit for this status number set by constant
-    - If current health below this number, snake will prioritize finding food
+    - If current health below this number, snake will prioritize finding food (no implementation of food finding at this stage)
   Refactoring of code with future growth in mind
-  
+
+1.0.2
+  Introduce idea of central behavioral algorithms
+  Establish existing behavior as an external function
+  Introduce "find nearest food" pathfinding approach
+  Allow toggling between default behaviour and "find nearest food" depending on hunger level
+
+1.0.3
+  Introduce new algorithm: holding pattern (run tight circles around yourself)
