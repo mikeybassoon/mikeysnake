@@ -273,7 +273,7 @@ function spaceOccupied(checkSpace, board){
   }
   for(var i = 0; i < snakes.length; i++){
     for(var j = 0; j < snakes[i].length; j++){
-      if(checkSpace.x == snakes[i].body[j].x && checkSpace y == snakes[i].body[j].y){
+      if(checkSpace.x == snakes[i].body[j].x && checkSpace.y == snakes[i].body[j].y){
         return true;
       }
     }
