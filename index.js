@@ -14,6 +14,7 @@ app.post('/end', handleEnd)
 app.listen(PORT, () => console.log(`Battlesnake Server listening at http://127.0.0.1:${PORT}`))
 
 const ESCAPE_ROUTE_SIZE = 10; // default size of cavern required to make a move legal
+const HUNGRY_TIME = 15; // point at which snake will start looking for food
 
 // http request handler functions
 
@@ -41,6 +42,7 @@ function handleMove(request, response) {
   var board = gameData.board;
   var gameID = gameData.game.id;
   var mySnake = gameData.you; // info about player's snake
+  var hungry = timeToEat(mySnake);
   var openSpaces = buildClearSpaceArray(board); // array of unobstructed spaces
 
   console.log('--MOVE gameID = ' + gameID);
@@ -75,32 +77,31 @@ function handleMove(request, response) {
     'y': currentLocation.y
   };
 
-  // no move found yet that works?
-  if(possibleMoves.length == 0){
-    console.log('===No escape route available!');
 
-    // find any open square to move into
+  // identify available spaces to move into
 
-    // up?
-    if(isClear(upLocation, board)){ //
-      possibleMoves.push('up');
-    }
-
-    // left?
-    if(isClear(leftLocation, board)){
-      possibleMoves.push('left');
-    }
-
-    // down?
-    if(isClear(downLocation, board)){
-      possibleMoves.push('down');
-    }
-
-    // right?
-    if(isClear(rightLocation, board)){
-      possibleMoves.push('right');
-    }
+  // up?
+  if(isClear(upLocation, board)){ //
+    possibleMoves.push('up');
   }
+
+  // left?
+  if(isClear(leftLocation, board)){
+    possibleMoves.push('left');
+  }
+
+  // down?
+  if(isClear(downLocation, board)){
+    possibleMoves.push('down');
+  }
+
+  // right?
+  if(isClear(rightLocation, board)){
+    possibleMoves.push('right');
+  }
+
+
+  // set target coordinates for travel
 
 
   // MAKE MOVE
@@ -135,7 +136,6 @@ function handleEnd(request, response) {
   Else returns false
 */
 function timeToEat(snake){
-  const HUNGRY_TIME = 20;
   if(snake.health < HUNGRY_TIME){
     return true;
   }
@@ -188,7 +188,6 @@ function buildClearSpaceArray(board){
   Returns true if space being checked is on the list of free spaces
   Else returns false
 */
-
 function isClear(checkSpace, clearSpaces){
   for(var i = 0; i < clearSpaces.length; i++){
     if(checkSpace.x == clearSpaces[i].x && checkSpace.y == clearSpaces[i].y){
@@ -207,7 +206,6 @@ function isClear(checkSpace, clearSpaces){
     <2> Board object
   Returns true if occupied, else returns false
 */
-
 function spaceOccupied(checkSpace, board){
   for(var i = 0; i < hazards.length; i++){
     if(checkSpace.x == hazards[i].x && checkSpace.y == hazards[i].y){
