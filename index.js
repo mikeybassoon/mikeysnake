@@ -81,31 +81,24 @@ function handleMove(request, response) {
 
     // find any open square to move into
 
-    if(currentLocation.y != board.height - 1){ // can only move up if not on top row
-      if(spaceClear(upLocation, board)){ //
-        possibleMoves.push('up');
-      }
+    // up?
+    if(isClear(upLocation, board)){ //
+      possibleMoves.push('up');
     }
 
     // left?
-    if(currentLocation.x != 0){ // can only go left if not in leftmost row
-      if(spaceClear(leftLocation, board)){
-        possibleMoves.push('left');
-      }
+    if(isClear(leftLocation, board)){
+      possibleMoves.push('left');
     }
 
     // down?
-    if(currentLocation.y != 0){ // can only go down if not in lowest row
-      if(spaceClear(downLocation, board)){
-        possibleMoves.push('down');
-      }
+    if(isClear(downLocation, board)){
+      possibleMoves.push('down');
     }
 
     // right?
-    if(currentLocation.x != board.width - 1){ // can only move right if not in rightmost row
-      if(spaceClear(rightLocation, board)){
-        possibleMoves.push('right');
-      }
+    if(isClear(rightLocation, board)){
+      possibleMoves.push('right');
     }
   }
 
@@ -114,8 +107,8 @@ function handleMove(request, response) {
 
 
   var move;
-  if(possibleMoves.length == 0){ // no legal move?
-    console.log('==No legal move available!');
+  if(possibleMoves.length == 0){
+
     move = 'left'; // move up, game over anyway
   } else
     move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]; // select a random legal move
