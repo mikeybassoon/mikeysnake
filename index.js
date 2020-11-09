@@ -16,6 +16,10 @@ app.listen(PORT, () => console.log(`Battlesnake Server listening at http://127.0
 const ESCAPE_ROUTE_SIZE = 10; // default size of cavern required to make a move legal
 const HUNGRY_TIME = 15; // point at which snake will start looking for food
 
+
+
+
+
 // http request handler functions
 
 function handleIndex(request, response) {
@@ -105,18 +109,39 @@ function handleMove(request, response) {
   }
 
 
-  // set target coordinates for travel
+  // decide next move
 
+  console.log('--Deciding stretegy');
+  var move; // text string for http response
+  var
 
-  // MAKE MOVE
-
-
-  var move;
-  if(possibleMoves.length == 0){
+  if(possibleMoves.length == 0){ // no legal moves?
     console.log('--No legal move available - performing default move');
     move = 'left'; // move up, game over anyway
-  } else
-    move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]; // select a random legal move
+  }
+  else if(possibleMoves.length == 1){ // only one legal move?
+    move = possibleMoves[0]; // make that move
+  }
+  else if(possibleMoves.length == 2){ // two choices?
+    // run cavern check protocol
+  }
+  else if(possibleMoves.length == 3){ // three choices?
+    if(hungry){
+      // run get food protocol
+    }
+    else{
+      move = randomMove(possibleMoves); // pick a random direction and move in it
+    }
+    // future option: run the "circles" (holding pattern) protocol
+  }
+  else{ // should not be possible
+    console.log('ERROR - invalid number of possibleMoves: ' + possibleMoves.length);
+    move = 'left';
+  }
+
+
+
+  // create HTTP response
 
   console.log('MOVE: ' + move)
   response.status(200).send({
@@ -130,6 +155,21 @@ function handleEnd(request, response) {
   console.log('END')
   response.status(200).send('ok')
 }
+
+// routing algorithm functions
+
+function randomMove(availableMoves){
+  return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+}
+
+
+
+
+
+
+
+
+
 
 // helper functions
 
