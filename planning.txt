@@ -18,7 +18,7 @@
 
 1.0.3
   Introduce idea of global pathfinding array
-  Build function to check if t
+  Build function to check if the array is clear
   Build circles/holding pattern navigation algorithm
 
 1.0.4

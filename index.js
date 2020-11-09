@@ -56,8 +56,20 @@ function handleMove(request, response) {
   var hungry = timeToEat(mySnake);
   var openSpaces = buildClearSpaceArray(board); // array of unobstructed spaces
 
+
+
+
+
+
   // perform check - is there a valid plan in place for this game?
-  var planSet = checkPlan(gameID
+
+
+
+
+
+
+
+
 
   console.log('--MOVE gameID = ' + gameID);
   console.log('--TURN: ' + gameData.turn);
@@ -133,11 +145,14 @@ function handleMove(request, response) {
     move = possibleMoves[0]; // make that move
   }
   else if(possibleMoves.length == 2){ // two choices?
+    move = randomMove(possibleMoves);
     // run cavern check protocol
   }
   else if(possibleMoves.length == 3){ // three choices?
     if(hungry){
       // run get food protocol
+      // until that's active, gotta run randomMove
+      move = randomMove(possibleMoves);
     }
     else{
       move = randomMove(possibleMoves); // pick a random direction and move in it
@@ -222,10 +237,11 @@ function checkPlan(planSpaces, clearSpaces){
 function timeToEat(snake){
   console.log('>--Inside timeToEat()');
   if(snake.health < HUNGRY_TIME){
+    console.log('>>--Exiting timeToEat() - snek is hungry');
     return true;
   }
 
-  console.log('>--Exiting timeToEat()');
+  console.log('>--Exiting timeToEat() - snek is not hungry');
   return false;
 }
 
@@ -282,13 +298,10 @@ function isClear(checkSpace, clearSpaces){
   console.log('>--Entering isClear()');
   for(var i = 0; i < clearSpaces.length; i++){
     if(checkSpace.x == clearSpaces[i].x && checkSpace.y == clearSpaces[i].y){
-      console.log(`>--Exiting isClear() - \[${checkSpace.x}, ${checkSpace.y}\] is clear`);
       return true;
     }
   }
 
-  // no match in clearSpaces list?
-  console.log(`>--Exiting isClear() - \[${checkSpace.x}, ${checkSpace.y}\] is not clear`);
   return false;
 }
 
@@ -308,11 +321,9 @@ function spaceOccupied(checkSpace, board){
   for(var i = 0; i < board.snakes.length; i++){
     for(var j = 0; j < board.snakes[i].length; j++){
       if(checkSpace.x == board.snakes[i].body[j].x && checkSpace.y == board.snakes[i].body[j].y){
-        console.log(`>--Exiting spaceOccupied - \[${checkSpace.x}, ${checkSpace.y}\] occupied`);
         return true;
       }
     }
   }
-  console.log(`>--Exiting spaceOccupied - \[${checkSpace.x}, ${checkSpace.y}\] not occupied`);
   return false;
 }
