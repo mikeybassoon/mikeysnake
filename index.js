@@ -113,7 +113,6 @@ function handleMove(request, response) {
 
   console.log('--Deciding stretegy');
   var move; // text string for http response
-  var
 
   if(possibleMoves.length == 0){ // no legal moves?
     console.log('--No legal move available - performing default move');
