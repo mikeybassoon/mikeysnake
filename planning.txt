@@ -17,6 +17,8 @@
   Allow toggling between default behaviour and "find nearest food" depending on hunger level
 
 1.0.3
+  Introduce idea of global pathfinding array
+  Build function to check if t
   Build circles/holding pattern navigation algorithm
 
 1.0.4

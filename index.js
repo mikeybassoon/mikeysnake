@@ -16,8 +16,15 @@ app.listen(PORT, () => console.log(`Battlesnake Server listening at http://127.0
 const ESCAPE_ROUTE_SIZE = 10; // default size of cavern required to make a move legal
 const HUNGRY_TIME = 15; // point at which snake will start looking for food
 
+/*  Coordinates Array - GLOBAL
 
+  Stores lists of coordinates in order that the battlesnake will consume in trying to reach target
+  Two dimensional
+    [gameID_1]: { {x, y}, {x, y}, {x, y} },
+    [gameID_2]: { ... }
 
+*/
+var directions = new Array;
 
 
 // http request handler functions
@@ -29,7 +36,7 @@ function handleIndex(request, response) {
     color: '#992288',
     head: 'sand-worm',
     tail: 'shac-coffee',
-    version: "1.0.1"
+    version: "1.0.3"
   }
   response.status(200).json(battlesnakeInfo)
 }
@@ -48,6 +55,9 @@ function handleMove(request, response) {
   var mySnake = gameData.you; // info about player's snake
   var hungry = timeToEat(mySnake);
   var openSpaces = buildClearSpaceArray(board); // array of unobstructed spaces
+
+  // perform check - is there a valid plan in place for this game?
+  var planSet = checkPlan(gameID
 
   console.log('--MOVE gameID = ' + gameID);
   console.log('--TURN: ' + gameData.turn);
@@ -119,6 +129,7 @@ function handleMove(request, response) {
     move = 'left'; // move up, game over anyway
   }
   else if(possibleMoves.length == 1){ // only one legal move?
+    console.log('--Making only possible move');
     move = possibleMoves[0]; // make that move
   }
   else if(possibleMoves.length == 2){ // two choices?
@@ -171,6 +182,36 @@ function randomMove(availableMoves){
 
 
 // helper functions
+
+/* function checkPlan
+
+  Parameters:
+    <1> Array of coordinates representing a navigation plan
+    <2> Array of all spaces on the board deemed to be "clear"
+  Returns true if all coordinates in planSpaces also match a coordinate pair in clearSpaces
+  Else returns false
+
+*/
+function checkPlan(planSpaces, clearSpaces){
+  if(planSpaces.length == 0){ // no planned route exists?
+    return false;
+  }
+  for(var i = 0; i < planSpaces.length; i++){
+    if(!isClear(planSpaces[i], clearSpaces)){ // found an obstructed space?
+      return false;
+    }
+  }
+
+  // no obstructed spaces on planned route found?
+  return true;
+}
+
+/*  function erasePlan
+
+  Takes current game ID
+  Erases all coordinates in plan ID associated with it
+
+*/
 
 /* function timeToEat
   Parameter:
