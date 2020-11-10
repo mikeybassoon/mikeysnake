@@ -56,13 +56,48 @@ function handleMove(request, response) {
   var hungry = timeToEat(mySnake);
   var openSpaces = buildClearSpaceArray(board); // array of unobstructed spaces
 
+  /* var strategy
 
+    A string holding a descriptor of the strategy currently being pursued by the snake
 
+    Acceptable values:
+      buildNewPlan
+      default
+      findFood
+      followPlan
+  */
+  var strategy = 'default';
 
+  // get current movement plan
+  var movementPlan = function(){
+    for(var i = 0; i < directions.length; i++){ // for each set of directions in the directions array
+      if(directions[gameID]){ // game plan exists for this game?
+        return directions[gameID];
+      }
+    }
+  };
 
+  // perform check - does the current movement plan include no obstructed spaces?
+  var validPlanExists = checkPlan(movementPlan, openSpaces);
 
-  // perform check - is there a valid plan in place for this game?
-
+  if(!hungry){
+    if(validPlanExists){
+      console.log('--Existing movement plan still works');
+      strategy = 'followPlan';
+    }
+    else{
+      console.log('--No valid plan available. Erasing old plan and building a new one.');
+      for(var i = 0; i < directions[gameID].length; i++){
+        directions[gameID].pop();
+      }
+      console.log('--Plan cleared.');
+      strategy = 'buildNewPlan';
+    }
+  }
+  else{ // snake is hungry?
+    console.log('--Snake is hungry. Seeking food.');
+    strategy = 'findFood';
+  }
 
 
 
@@ -136,34 +171,29 @@ function handleMove(request, response) {
   console.log('--Deciding stretegy');
   var move; // text string for http response
 
-  if(possibleMoves.length == 0){ // no legal moves?
-    console.log('--No legal move available - performing default move');
-    move = 'left'; // move up, game over anyway
-  }
-  else if(possibleMoves.length == 1){ // only one legal move?
-    console.log('--Making only possible move');
-    move = possibleMoves[0]; // make that move
-  }
-  else if(possibleMoves.length == 2){ // two choices?
-    move = randomMove(possibleMoves);
-    // run cavern check protocol
-  }
-  else if(possibleMoves.length == 3){ // three choices?
-    if(hungry){
-      // run get food protocol
-      // until that's active, gotta run randomMove
+  // note - each of the behaviours listed below in if() statement needs its own control logic
+  if(strategy == 'default' && strategy == 'findFood' && strategy == 'buildNewPlan' && strategy == 'followPlan'){
+    if(possibleMoves.length == 0){ // no legal moves?
+      console.log('--No legal move available - performing default move');
+      move = 'left'; // move up, game over anyway
+    }
+    else if(possibleMoves.length == 1){ // only one legal move?
+      console.log('--Making only possible move');
+      move = possibleMoves[0]; // make that move
+    }
+    else if(possibleMoves.length == 2){ // two choices?
       move = randomMove(possibleMoves);
+      // run cavern check protocol
     }
-    else{
+    else if(possibleMoves.length == 3){ // three choices?
       move = randomMove(possibleMoves); // pick a random direction and move in it
+      // future option: run the "circles" (holding pattern) protocol
     }
-    // future option: run the "circles" (holding pattern) protocol
+    else{ // should not be possible
+      console.log('ERROR - invalid number of possibleMoves: ' + possibleMoves.length);
+      move = 'left';
+    }
   }
-  else{ // should not be possible
-    console.log('ERROR - invalid number of possibleMoves: ' + possibleMoves.length);
-    move = 'left';
-  }
-
 
 
   // create HTTP response
@@ -186,8 +216,6 @@ function handleEnd(request, response) {
 function randomMove(availableMoves){
   return availableMoves[Math.floor(Math.random() * availableMoves.length)];
 }
-
-
 
 
 
