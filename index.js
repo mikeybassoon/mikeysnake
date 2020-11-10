@@ -164,11 +164,11 @@ function handleMove(request, response) {
 
   // decide next move
 
-  console.log('--Deciding stretegy');
+  console.log('--Deciding strategy');
   var move; // text string for http response
 
   // note - each of the behaviours listed below in if() statement needs its own control logic
-  if(strategy == 'default' && strategy == 'findFood' && strategy == 'buildNewPlan' && strategy == 'followPlan'){
+  if(strategy == 'default' || strategy == 'findFood' || strategy == 'buildNewPlan' || strategy == 'followPlan'){
     if(possibleMoves.length == 0){ // no legal moves?
       console.log('--No legal move available - performing default move');
       move = 'left'; // move up, game over anyway
