@@ -86,11 +86,7 @@ function handleMove(request, response) {
       strategy = 'followPlan';
     }
     else{
-      console.log('--No valid plan available. Erasing old plan and building a new one.');
-      for(var i = 0; i < directions[gameID].length; i++){
-        directions[gameID].pop();
-      }
-      console.log('--Plan cleared.');
+      console.log('--No valid plan available. Building a new one.');
       strategy = 'buildNewPlan';
     }
   }
