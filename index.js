@@ -22,7 +22,7 @@ const HUNGRY_TIME = 15; // point at which snake will start looking for food
   Two dimensional
     [gameID_1]: { {x, y}, {x, y}, {x, y} },
     [gameID_2]: { ... }
-
+  Highest indices in array store first instruction
 */
 var directions = new Array;
 
@@ -134,7 +134,6 @@ function handleMove(request, response) {
     'y': currentLocation.y
   };
 
-
   // identify available spaces to move into
 
   // up?
@@ -162,13 +161,19 @@ function handleMove(request, response) {
   }
 
 
+
+
+
+
+
+
   // decide next move
 
   console.log('--Deciding strategy');
   var move; // text string for http response
 
   // note - each of the behaviours listed below in if() statement needs its own control logic
-  if(strategy == 'default' || strategy == 'findFood' || strategy == 'buildNewPlan' || strategy == 'followPlan'){
+  if(strategy == 'default' || strategy == 'findFood' || strategy == 'buildNewPlan'){
     if(possibleMoves.length == 0){ // no legal moves?
       console.log('--No legal move available - performing default move');
       move = 'left'; // move up, game over anyway
@@ -189,6 +194,25 @@ function handleMove(request, response) {
       console.log('ERROR - invalid number of possibleMoves: ' + possibleMoves.length);
       move = 'left';
     }
+  }
+  else if(strategy =='followPlan'){
+    // get next direction
+    var nextLocation = directions[gameID].pop();
+
+    if(sameCoordinates(nextLocation, upLocation)){
+      move = 'up';
+    }
+    else if(sameCoordinates(nextLocation, downLocation)){
+      move = 'down';
+    }
+    else if(sameCoordinates(nextLocation, leftLocation)){
+      move = 'left';
+    }
+    else if(sameCoordinates(nextLocation, rightLocation)){
+      move = 'right';
+    }
+
+    console.log('Next move in plan: ' + move);
   }
 
 
