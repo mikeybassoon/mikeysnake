@@ -36,7 +36,7 @@ function handleIndex(request, response) {
     color: '#992288',
     head: 'sand-worm',
     tail: 'shac-coffee',
-    version: "1.0.3"
+    version: "1.0.4"
   }
   response.status(200).json(battlesnakeInfo)
 }
@@ -172,8 +172,54 @@ function handleMove(request, response) {
   console.log('--Deciding strategy');
   var move; // text string for http response
 
-  // note - each of the behaviours listed below in if() statement needs its own control logic
-  if(strategy == 'default' || strategy == 'findFood' || strategy == 'buildNewPlan'){
+  // execute appropriate behaviour for strategy
+  move = executeStrategy(strategy, possibleMoves, gameID);
+
+
+
+  // create HTTP response
+
+  console.log('MOVE: ' + move)
+  response.status(200).send({
+    move: move
+  })
+}
+
+function handleEnd(request, response) {
+  var gameData = request.body
+
+  console.log('END')
+  response.status(200).send('ok')
+}
+
+
+
+// routing algorithm functions
+
+function randomMove(availableMoves){
+  return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+}
+
+
+/* STRATEGY EXECUTION FUNCTIONS
+
+  Functions used to determine moves given current board conditions and stategy settings
+
+*/
+
+/* function executeStrategy
+
+  Given a text string with a valid strategy, executes it
+  Parameters
+    <1> strategy <string>
+    <2> array of possible moves
+    <3> game ID string
+  Returns a valid move (left, right, up, down)
+*/
+function executeStrategy(strategy, possibleMoves, gameID){
+  var move;
+
+  if(strategy == 'default'){
     if(possibleMoves.length == 0){ // no legal moves?
       console.log('--No legal move available - performing default move');
       move = 'left'; // move up, game over anyway
@@ -187,8 +233,7 @@ function handleMove(request, response) {
       // run cavern check protocol
     }
     else if(possibleMoves.length == 3){ // three choices?
-      move = randomMove(possibleMoves); // pick a random direction and move in it
-      // future option: run the "circles" (holding pattern) protocol
+      move = randomMove(possibleMoves);
     }
     else{ // should not be possible
       console.log('ERROR - invalid number of possibleMoves: ' + possibleMoves.length);
@@ -214,32 +259,18 @@ function handleMove(request, response) {
 
     console.log('Next move in plan: ' + move);
   }
+  else if(strategy =='findFood'){
 
+  }
+  else if(strategy =='buildNewPlan'){
 
-  // create HTTP response
+  }
+  else{
+    console.log('==ERROR invalid strategy input: ' + strategy);
+  }
 
-  console.log('MOVE: ' + move)
-  response.status(200).send({
-    move: move
-  })
+  return move;
 }
-
-function handleEnd(request, response) {
-  var gameData = request.body
-
-  console.log('END')
-  response.status(200).send('ok')
-}
-
-// routing algorithm functions
-
-function randomMove(availableMoves){
-  return availableMoves[Math.floor(Math.random() * availableMoves.length)];
-}
-
-
-
-
 
 
 
