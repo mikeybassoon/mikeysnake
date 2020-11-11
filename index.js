@@ -1,5 +1,8 @@
 const bodyParser = require('body-parser')
 const express = require('express')
+const boardAnalyzer = require('./board.js');
+const game = require('./game.js');
+const initializer = require('./initializer.js');
 
 const PORT = process.env.PORT || 3000
 
@@ -13,19 +16,9 @@ app.post('/end', handleEnd)
 
 app.listen(PORT, () => console.log(`Battlesnake Server listening at http://127.0.0.1:${PORT}`))
 
+
 const ESCAPE_ROUTE_SIZE = 10; // default size of cavern required to make a move legal
 const HUNGRY_TIME = 15; // point at which snake will start looking for food
-
-/*  Coordinates Array - GLOBAL
-
-  Stores lists of coordinates in order that the battlesnake will consume in trying to reach target
-  Two dimensional
-    [gameID_1]: { {x, y}, {x, y}, {x, y} },
-    [gameID_2]: { ... }
-  Highest indices in array store first instruction
-*/
-var directions = new Array;
-
 
 // http request handler functions
 
@@ -36,7 +29,7 @@ function handleIndex(request, response) {
     color: '#992288',
     head: 'sand-worm',
     tail: 'shac-coffee',
-    version: "1.0.4"
+    version: "1.1.0"
   }
   response.status(200).json(battlesnakeInfo)
 }
@@ -44,121 +37,15 @@ function handleIndex(request, response) {
 function handleStart(request, response) {
   var gameData = request.body
 
+  initializer.initialize(gameData); // start server record of board analysis engine
+
   console.log('START')
   response.status(200).send('ok')
 }
 
 function handleMove(request, response) {
   var gameData = request.body;
-  var board = gameData.board;
-  var gameID = gameData.game.id;
-  var mySnake = gameData.you; // info about player's snake
-  var hungry = timeToEat(mySnake);
-  var openSpaces = buildClearSpaceArray(board); // array of unobstructed spaces
-
-  /* var strategy
-
-    A string holding a descriptor of the strategy currently being pursued by the snake
-
-    Acceptable values:
-      buildNewPlan
-      default
-      findFood
-      followPlan
-  */
-  var strategy = 'default';
-
-  // get current movement plan
-  var movementPlan = function(){
-    for(var i = 0; i < directions.length; i++){ // for each set of directions in the directions array
-      if(directions[gameID]){ // game plan exists for this game?
-        return directions[gameID];
-      }
-    }
-  };
-
-  // perform check - does the current movement plan include no obstructed spaces?
-  var validPlanExists = checkPlan(movementPlan, openSpaces);
-
-  if(!hungry){
-    if(validPlanExists){
-      console.log('--Existing movement plan still works');
-      strategy = 'followPlan';
-    }
-    else{
-      console.log('--No valid plan available. Building a new one.');
-      strategy = 'buildNewPlan';
-    }
-  }
-  else{ // snake is hungry?
-    console.log('--Snake is hungry. Seeking food.');
-    strategy = 'findFood';
-  }
-
-
-
-
-
-
-
-
-  console.log('--MOVE gameID = ' + gameID);
-  console.log('--TURN: ' + gameData.turn);
-  console.log('--Snake identified. ID: ' + mySnake.id);
-  console.log(`--Engaging move logic - current coordinates \[${mySnake.head.x}, ${mySnake.head.y}\]`);
-
-  // identify valid directions for snake to travel
-  var possibleMoves = new Array;
-
-  // define all adjacent coordinates
-  // check if a cavern-free path is available for each
-
-  var currentLocation = {
-    'x': mySnake.head.x,
-    'y': mySnake.head.y
-  };
-  var upLocation = {
-    'x': currentLocation.x,
-    'y': currentLocation.y + 1
-  };
-  var leftLocation = {
-    'x': currentLocation.x - 1,
-    'y': currentLocation.y
-  };
-  var downLocation = {
-    'x': currentLocation.x,
-    'y': currentLocation.y - 1
-  };
-  var rightLocation = {
-    'x': currentLocation.x + 1,
-    'y': currentLocation.y
-  };
-
-  // identify available spaces to move into
-
-  // up?
-  if(isClear(upLocation, openSpaces)){
-    console.log('--Up is valid direction');
-    possibleMoves.push('up');
-  }
-
-  // left?
-  if(isClear(leftLocation, openSpaces)){
-    console.log('--Left is valid direction');
-    possibleMoves.push('left');
-  }
-
-  // down?
-  if(isClear(downLocation, openSpaces)){
-    console.log('--Down is valid direction');
-    possibleMoves.push('down');
-  }
-
-  // right?
-  if(isClear(rightLocation, openSpaces)){
-    console.log('--Right is valid direction');
-    possibleMoves.push('right');
-  }
+  
 
 
 
