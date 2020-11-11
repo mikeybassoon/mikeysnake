@@ -1,11 +1,13 @@
 const game = require('./game.js');
 
-module.exports = function(){
-  function initialize(gameData){
-    var newGame = { // package data for new game
-      'gameID': gameData.game.id,
-      'turn': gameData.turn
-    };
-    game.createNewGame(newGame);
+exports.initialize = function(gameData){
+  // package data so it can be passed to game object
+  var currentGame = {
+    'gameID': gameData.game.id,
+    'turn': gameData.turn
+  };
+
+  if(!game.currentGameExists){ // current game does not have an entry on server yet?
+    game.createNewGame(currentGame); // create new game
   }
 }
