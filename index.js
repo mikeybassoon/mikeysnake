@@ -97,7 +97,7 @@ function handleMove(request, response) {
     }
     else{
       console.log('--No valid plan available. Building a new one.');
-      strategy = 'buildNewPlan';
+      strategy = 'default';
     }
   }
   else{ // snake is hungry?
@@ -267,7 +267,6 @@ function executeStrategy(strategy, possibleMoves, gameID){
       move = possibleMoves[0]; // make that move
     }
     else if(possibleMoves.length == 2){ // two choices?
-
 
       move = randomMove(possibleMoves);
     }
