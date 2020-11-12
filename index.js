@@ -55,6 +55,16 @@ function handleMove(request, response) {
   var mySnake = gameData.you; // info about player's snake
   var hungry = timeToEat(mySnake);
   var openSpaces = buildClearSpaceArray(board); // array of unobstructed spaces
+  var foodSpaces = board.food;
+  var otherSnakes = function(){
+    var snakeArray = new Array;
+    for(var i = 0; i < gameData.board.snakes.length; i++){
+      if(!gameData.board.snakes[i].id == mySnake.id){
+        snakeArray.push(gameData.board.snakes[i]);
+      }
+    }
+    return snakeArray;
+  };
 
   /* var strategy
 
@@ -160,7 +170,35 @@ function handleMove(request, response) {
     possibleMoves.push('right');
   }
 
+  // if multiple options, eliminate ones close to other snakes' heads
 
+  while(possibleMoves.length > 1){
+    var changeMade = false;
+
+    if(possibleMoves.includes('up')){
+      if(nextToSnakeHead(upLocation, otherSnakes)){
+        possibleMoves.pop('up');
+      }
+    }
+    else if(possibleMoves.includes('down')){
+      if(nextToSnakeHead(downLocation, otherSnakes)){
+        possibleMoves.pop('down');
+      }
+    }
+    else if(possibleMoves.includes('left')){
+      if(nextToSnakeHead(leftLocation, otherSnakes)){
+        possibleMoves.pop('left');
+      }
+    }
+    else if(possibleMoves.includes('right')){
+      if(nextToSnakeHead(rightLocation, otherSnakes)){
+        possibleMoves.pop('right');
+      }
+    }
+
+    if(!changeMade)
+      break;
+  }
 
 
 
@@ -229,8 +267,9 @@ function executeStrategy(strategy, possibleMoves, gameID){
       move = possibleMoves[0]; // make that move
     }
     else if(possibleMoves.length == 2){ // two choices?
+
+
       move = randomMove(possibleMoves);
-      // run cavern check protocol
     }
     else if(possibleMoves.length == 3){ // three choices?
       move = randomMove(possibleMoves);
@@ -365,6 +404,24 @@ function buildClearSpaceArray(board){
   return clearSpaces;
 }
 
+function areAdjacent(coordinates_a, coordinates_b){
+  if(coordinates_a.x == coordinates_b.x - 1 && coordinates_a.y == coordinates_b.y){
+    return true;
+  }
+  else if(coordinates_a.x == coordinates_b.x + 1 &&  coordinates_a.y == coordinates_b.y){
+    return true;
+  }
+  else if(coordinates_a.x == coordinates_b.x && coordinates_a.y == coordinates_b.y + 1){
+    return true;
+  }
+  else if(coordinates_a.x == coordinates_b.x && coordinates_a.y == coordinates_b.y - 1){
+    return true;
+  }
+
+  return false;
+}
+
+
 /*  function isClear
   Checks if a single space is on the list of unobstructed spaces
   Parameters:
@@ -377,6 +434,25 @@ function isClear(checkSpace, clearSpaces){
   console.log('>--Entering isClear()');
   for(var i = 0; i < clearSpaces.length; i++){
     if(checkSpace.x == clearSpaces[i].x && checkSpace.y == clearSpaces[i].y){
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/*  function nextToSnakeHead
+
+  Returns true if the coordinate supplied is next to a snake head
+  Else returns false
+  Parameters
+    <1> Array containing the other snakes
+
+*/
+
+function nextToSnakeHead(coordinates, otherSnakes){
+  for(var i = 0; i < otherSnakes.length; i++){
+    if(areAdjacent(coordinates, otherSnakes[i].head)){
       return true;
     }
   }
