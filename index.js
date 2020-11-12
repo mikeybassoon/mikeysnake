@@ -225,12 +225,12 @@ function handleMove(request, response) {
   // check remaining available spaces for number of exits
   var mostExits = 0;
   // package current coordinates for easy distribution
-  var currentCoordinates = new Array;
-
-  currentCoordinates.push(upLocation);
-  currentCoordinates.push(downLocation);
-  currentCoordinates.push(leftLocation);
-  currentCoordinates.push(rightLocation);
+  var currentCoordinates = {
+    'upLocation': upLocation,
+    'downLocation': downLocation,
+    'leftLocation': leftLocation,
+    'rightLocation': rightLocation
+  };
 
   // package game data required by number of exits function
   var gameDataObject = {
