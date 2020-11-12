@@ -30,6 +30,7 @@ var directions = new Array;
 // http request handler functions
 
 function handleIndex(request, response) {
+  console.log('>>New HTTP request; entering handleIndex()');
   var battlesnakeInfo = {
     apiversion: '1',
     author: 'mikeybassoon',
@@ -39,16 +40,21 @@ function handleIndex(request, response) {
     version: "1.0.4"
   }
   response.status(200).json(battlesnakeInfo)
+  console.log('<<HTTP response sent');
 }
 
 function handleStart(request, response) {
+  console.log('>>New HTTP request; entering handleStart()');
   var gameData = request.body
 
   console.log('START')
   response.status(200).send('ok')
+  console.log('<<HTTP response sent');
 }
 
 function handleMove(request, response) {
+  console.log('>>New HTTP request; entering handleMove()');
+
   var gameData = request.body;
   var board = gameData.board;
   var gameID = gameData.game.id;
@@ -221,13 +227,18 @@ function handleMove(request, response) {
   response.status(200).send({
     move: move
   })
+  console.log('<<HTTP response sent');
 }
 
 function handleEnd(request, response) {
+  console.log('>>Entering handleEnd()');
   var gameData = request.body
 
   console.log('END')
   response.status(200).send('ok')
+  console.log('<<HTTP response sent');
+
+  // future - clean out arrays!
 }
 
 
@@ -235,7 +246,12 @@ function handleEnd(request, response) {
 // routing algorithm functions
 
 function randomMove(availableMoves){
-  return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+  console.log('>--Entering randomMove()');
+
+  var move = availableMoves[Math.floor(Math.random() * availableMoves.length)]
+
+  console.log('<--Exiting randomMove() = ' + move);
+  return move;
 }
 
 
@@ -255,6 +271,7 @@ function randomMove(availableMoves){
   Returns a valid move (left, right, up, down)
 */
 function executeStrategy(strategy, possibleMoves, gameID){
+  console.log('>--Entering executeStrategy()');
   var move;
 
   if(strategy == 'default'){
@@ -354,6 +371,7 @@ function executeStrategy(strategy, possibleMoves, gameID){
     console.log('==ERROR invalid strategy input: ' + strategy);
   }
 
+  console.log('<--Exiting executeStrategy() = ' + move);
   return move;
 }
 
@@ -372,25 +390,23 @@ function executeStrategy(strategy, possibleMoves, gameID){
 
 */
 function checkPlan(planSpaces, clearSpaces){
+  console.log('>--Entering checkPlan()');
   if(planSpaces.length == 0){ // no planned route exists?
+    console.log('<--Exiting checkPlan() = FALSE');
     return false;
   }
   for(var i = 0; i < planSpaces.length; i++){
     if(!isClear(planSpaces[i], clearSpaces)){ // found an obstructed space?
+      console.log('<--Exiting checkPlan() = FALSE');
       return false;
     }
   }
 
   // no obstructed spaces on planned route found?
+  console.log('<--Exiting checkPlan() = TRUE');
   return true;
 }
 
-/*  function erasePlan
-
-  Takes current game ID
-  Erases all coordinates in plan ID associated with it
-
-*/
 
 /* function timeToEat
   Parameter:
@@ -417,12 +433,13 @@ function timeToEat(snake){
   Precondition: both coordinates must have attributes 'x' and 'y'
 */
 function sameCoordinates(space_a, space_b){
-  console.log('>--Inside sameCoordinates()');
+  console.log('>--Entering sameCoordinates()');
   if(space_a.x == space_b.x && space_a.y == space_b.y){
+    ('<--Exiting sameCoordinates() = TRUE');
     return true;
   }
 
-  console.log('>--Exiting sameCoordinates()');
+  console.log('<--Exiting sameCoordinates() = FALSE');
   return false;
 }
 
@@ -433,6 +450,7 @@ function sameCoordinates(space_a, space_b){
   Returns the array
 */
 function buildClearSpaceArray(board){
+  console.log('>--Entering buildClearSpaceArray()');
   var clearSpaces = new Array;
 
   for(var x = 0; x < board.width; x++){
@@ -447,23 +465,30 @@ function buildClearSpaceArray(board){
     }
   }
 
+  console.log('<--Exiting buildClearSpaceArray');
   return clearSpaces;
 }
 
 function areAdjacent(coordinates_a, coordinates_b){
+  console.log('>--Entering areAdjacent()');
   if(coordinates_a.x == coordinates_b.x - 1 && coordinates_a.y == coordinates_b.y){
+    console.log('<--Exiting areAdjacent() = TRUE');
     return true;
   }
   else if(coordinates_a.x == coordinates_b.x + 1 &&  coordinates_a.y == coordinates_b.y){
+    console.log('<--Exiting areAdjacent() = TRUE');
     return true;
   }
   else if(coordinates_a.x == coordinates_b.x && coordinates_a.y == coordinates_b.y + 1){
+    console.log('<--Exiting areAdjacent() = TRUE');
     return true;
   }
   else if(coordinates_a.x == coordinates_b.x && coordinates_a.y == coordinates_b.y - 1){
+    console.log('<--Exiting areAdjacent() = TRUE');
     return true;
   }
 
+  console.log('<--Exiting areAdjacent() = FALSE');
   return false;
 }
 
@@ -480,10 +505,12 @@ function isClear(checkSpace, clearSpaces){
   console.log('>--Entering isClear()');
   for(var i = 0; i < clearSpaces.length; i++){
     if(checkSpace.x == clearSpaces[i].x && checkSpace.y == clearSpaces[i].y){
+      console.log('<--Exiting isClear() = TRUE');
       return true;
     }
   }
 
+  console.log('<--Exiting isClear() = FALSE');
   return false;
 }
 
@@ -497,12 +524,16 @@ function isClear(checkSpace, clearSpaces){
 */
 
 function nextToSnakeHead(coordinates, otherSnakes){
+  console.log('>--Entering nextToSnakeHead');
+  console.log('--Coordinates checked: ' + coordinates.x + ', ' coordinates.y);
   for(var i = 0; i < otherSnakes.length; i++){
     if(areAdjacent(coordinates, otherSnakes[i].head)){
+      console.log('<--Exiting nextToSnakeHead() = TRUE');
       return true;
     }
   }
 
+  console.log('<--Exiting nextToSnakeHead() = FALSE');
   return false;
 }
 
@@ -514,17 +545,23 @@ function nextToSnakeHead(coordinates, otherSnakes){
   Returns true if occupied, else returns false
 */
 function spaceOccupied(checkSpace, board){
+  console.log('>--Entering spaceOccupied()');
+  console.log('--Coordinates checked: ' + checkSpace.x + ', ' checkSpace.y);
+
   for(var i = 0; i < board.hazards.length; i++){
     if(checkSpace.x == board.hazards[i].x && checkSpace.y == board.hazards[i].y){;
+      console.log('<--Exiting spaceOccuped() = TRUE');
       return true;
     }
   }
   for(var i = 0; i < board.snakes.length; i++){
     for(var j = 0; j < board.snakes[i].length; j++){
       if(checkSpace.x == board.snakes[i].body[j].x && checkSpace.y == board.snakes[i].body[j].y){
+        console.log('<--Exiting spaceOccupied() = TRUE');
         return true;
       }
     }
   }
+  console.log('<--Exiting spaceOccupied() = FALSE');
   return false;
 }
