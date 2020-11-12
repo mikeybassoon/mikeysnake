@@ -191,21 +191,21 @@ function handleMove(request, response) {
     }
     else if(possibleMoves.includes('down')){
       if(nextToSnakeHead(downLocation, otherSnakes)){
-        console.log('-- ' + downLocation.x + ', ' + downLocation.y' + ' is adjacent to a snake head');
+        console.log('-- ' + downLocation.x + ', ' + downLocation.y + ' is adjacent to a snake head');
         possibleMoves.pop('down');
         changeMade = true;
       }
     }
     else if(possibleMoves.includes('left')){
       if(nextToSnakeHead(leftLocation, otherSnakes)){
-        console.log('-- ' + leftLocation.x + ', ' + leftLocation.y' + ' is adjacent to a snake head');
+        console.log('-- ' + leftLocation.x + ', ' + leftLocation.y + ' is adjacent to a snake head');
         possibleMoves.pop('left');
         changeMade = true;
       }
     }
     else if(possibleMoves.includes('right')){
       if(nextToSnakeHead(rightLocation, otherSnakes)){
-        console.log('-- ' + rightLocation.x + ', ' + rightLocation.y' + ' is adjacent to a snake head');
+        console.log('-- ' + rightLocation.x + ', ' + rightLocation.y + ' is adjacent to a snake head');
         possibleMoves.pop('right');
         changeMade = true;
       }
