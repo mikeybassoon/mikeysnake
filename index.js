@@ -559,7 +559,7 @@ function buildClearSpaceArray(board){
 function buildOtherSnakesArray(gameData){
   var snakeArray = new Array;
   for(var i = 0; i < gameData.board.snakes.length; i++){
-    if(!gameData.board.snakes[i].id == mySnake.id){
+    if(!gameData.board.snakes[i].id == gameData.you.id){
       snakeArray.push(gameData.board.snakes[i]);
     }
   }
