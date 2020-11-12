@@ -39,7 +39,7 @@ function handleIndex(request, response) {
     color: '#992288',
     head: 'sand-worm',
     tail: 'shac-coffee',
-    version: "1.0.4"
+    version: "1.1.0"
   }
   response.status(200).json(battlesnakeInfo)
   console.log('<<HTTP response sent');
