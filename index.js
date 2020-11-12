@@ -299,9 +299,56 @@ function executeStrategy(strategy, possibleMoves, gameID){
   }
   else if(strategy =='findFood'){
 
+    /*  NOTE - this is placeholder code. The findFood algorithm is not yet written.
+
+    */
+
+    if(possibleMoves.length == 0){ // no legal moves?
+      console.log('--No legal move available - performing default move');
+      move = 'left'; // move up, game over anyway
+    }
+    else if(possibleMoves.length == 1){ // only one legal move?
+      console.log('--Making only possible move');
+      move = possibleMoves[0]; // make that move
+    }
+    else if(possibleMoves.length == 2){ // two choices?
+
+      move = randomMove(possibleMoves);
+    }
+    else if(possibleMoves.length == 3){ // three choices?
+      move = randomMove(possibleMoves);
+    }
+    else{ // should not be possible
+      console.log('ERROR - invalid number of possibleMoves: ' + possibleMoves.length);
+      move = 'left';
+    }
   }
   else if(strategy =='buildNewPlan'){
+    /* NOTE - this is a placeholder algorithm
+      New one needs to be written
 
+
+    */
+
+    if(possibleMoves.length == 0){ // no legal moves?
+      console.log('--No legal move available - performing default move');
+      move = 'left'; // move up, game over anyway
+    }
+    else if(possibleMoves.length == 1){ // only one legal move?
+      console.log('--Making only possible move');
+      move = possibleMoves[0]; // make that move
+    }
+    else if(possibleMoves.length == 2){ // two choices?
+
+      move = randomMove(possibleMoves);
+    }
+    else if(possibleMoves.length == 3){ // three choices?
+      move = randomMove(possibleMoves);
+    }
+    else{ // should not be possible
+      console.log('ERROR - invalid number of possibleMoves: ' + possibleMoves.length);
+      move = 'left';
+    }
   }
   else{
     console.log('==ERROR invalid strategy input: ' + strategy);
