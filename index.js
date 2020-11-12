@@ -68,15 +68,8 @@ function handleMove(request, response) {
   var hungry = timeToEat(mySnake);
   var openSpaces = buildClearSpaceArray(board); // array of unobstructed spaces
   var foodSpaces = board.food;
-  var otherSnakes = function(){
-    var snakeArray = new Array;
-    for(var i = 0; i < gameData.board.snakes.length; i++){
-      if(!gameData.board.snakes[i].id == mySnake.id){
-        snakeArray.push(gameData.board.snakes[i]);
-      }
-    }
-    return snakeArray;
-  };
+  var otherSnakes = buildOtherSnakesArray(gameData);
+
 
   /* var strategy
 
@@ -182,35 +175,34 @@ function handleMove(request, response) {
     possibleMoves.push('right');
   }
 
-  // if multiple options, eliminate ones close to other snakes' heads
-
+  // if multiple options, eliminate ones that are less desirable
   while(possibleMoves.length > 1){
     console.log('--Checking if spaces adjacent to snake heads');
     var changeMade = false;
 
     if(possibleMoves.includes('up')){
-      if(nextToSnakeHead(upLocation, otherSnakes)){
+      if(nextToSnakeHead(upLocation, otherSnakes, mySnake)){
         console.log('-- ' + upLocation.x + ', ' + upLocation.y + ' is adjacent to a snake head');
         possibleMoves.pop('up');
         changeMade = true;
       }
     }
     else if(possibleMoves.includes('down')){
-      if(nextToSnakeHead(downLocation, otherSnakes)){
+      if(nextToSnakeHead(downLocation, otherSnakes, mySnake)){
         console.log('-- ' + downLocation.x + ', ' + downLocation.y + ' is adjacent to a snake head');
         possibleMoves.pop('down');
         changeMade = true;
       }
     }
     else if(possibleMoves.includes('left')){
-      if(nextToSnakeHead(leftLocation, otherSnakes)){
+      if(nextToSnakeHead(leftLocation, otherSnakes, mySnake)){
         console.log('-- ' + leftLocation.x + ', ' + leftLocation.y + ' is adjacent to a snake head');
         possibleMoves.pop('left');
         changeMade = true;
       }
     }
     else if(possibleMoves.includes('right')){
-      if(nextToSnakeHead(rightLocation, otherSnakes)){
+      if(nextToSnakeHead(rightLocation, otherSnakes, mySnake)){
         console.log('-- ' + rightLocation.x + ', ' + rightLocation.y + ' is adjacent to a snake head');
         possibleMoves.pop('right');
         changeMade = true;
@@ -229,6 +221,104 @@ function handleMove(request, response) {
       console.log('--Move array reduced. Checking if further reduction possible.')
     }
   }
+
+  // check remaining available spaces for number of exits
+  var mostExits = 0;
+  // package current coordinates for easy distribution
+  var currentCoordinates = new Array;
+
+  currentCoordinates.push(upLocation);
+  currentCoordinates.push(downLocation);
+  currentCoordinates.push(leftLocation);
+  currentCoordinates.push(rightLocation);
+
+  // package game data required by number of exits function
+  var gameDataObject = {
+    'otherSnakes': otherSnakes,
+    'userSnake': mySnake,
+    'clearSpaces': openSpaces
+  };
+
+  // loop until no more moves can be eliminated
+  console.log('Testing number of escape routes to eliminate possibilities');
+  var changeMade = true; // initialize loop condition
+  while(possibleMoves.length > 1 && changeMade){ // don't do this if only one move possible
+    changeMade = false; // loop condition false by default
+
+    // test each of the four spaces for number of exits
+    if(possibleMoves.includes('up')){
+      var coordinatesArrayObject = currentCoordinates;
+      for(var i = 0; i < 4; i++){ // update y coordinate of all four coordinates
+        coordinatesArrayObject.y++;
+      }
+
+      // test number of exits in up space
+      var exits = numberOfExits(coordinatesArrayObject, gameDataObject)
+      if(exits <= mostExits){
+        possibleMoves.pop('up'); // remove up move as a possibility
+        changeMade = true;
+      }
+      else{
+        mostExits = exits;
+        changeMade = true;
+      }
+    }
+    else if(possibleMoves.includes('down')){
+      var coordinatesArrayObject = currentCoordinates;
+      for(var i = 0; i < 4; i++){ // update y coordinate of all four coordinates
+        coordinatesArrayObject.y--;
+      }
+
+      // test number of exits in up space
+      var exits = numberOfExits(coordinatesArrayObject, gameDataObject)
+      if(exits <= mostExits){
+        possibleMoves.pop('down'); // remove up move as a possibility
+        changeMade = true;
+      }
+      else{
+        mostExits = exits;
+        changeMade = true;
+      }
+    }
+    else if(possibleMoves.includes('left')){
+      var coordinatesArrayObject = currentCoordinates;
+      for(var i = 0; i < 4; i++){ // update y coordinate of all four coordinates
+        coordinatesArrayObject.x--;
+      }
+
+      // test number of exits in up space
+      var exits = numberOfExits(coordinatesArrayObject, gameDataObject)
+      if(exits <= mostExits){
+        possibleMoves.pop('left'); // remove up move as a possibility
+        changeMade = true;
+      }
+      else{
+        mostExits = exits;
+        changeMade = true;
+      }
+    }
+    else if(possibleMoves.includes('right')){
+      var coordinatesArrayObject = currentCoordinates;
+      for(var i = 0; i < 4; i++){ // update y coordinate of all four coordinates
+        coordinatesArrayObject.x++;
+      }
+
+      // test number of exits in up space
+      var exits = numberOfExits(coordinatesArrayObject, gameDataObject)
+      if(exits <= mostExits){
+        possibleMoves.pop('right'); // remove up move as a possibility
+        changeMade = true;
+      }
+      else{
+        mostExits = exits;
+        changeMade = true;
+      }
+    }
+    else{
+      console.out('ERROR: invalid move found in possibleMoves[]');
+    }
+  }
+
 
 
 
@@ -266,6 +356,10 @@ function handleEnd(request, response) {
 
   // future - clean out arrays!
 }
+
+
+
+
 
 
 
@@ -406,66 +500,33 @@ function executeStrategy(strategy, possibleMoves, gameID){
 
 // helper functions
 
-/* function checkPlan
-
+/* function areAdjacent
   Parameters:
-    <1> Array of coordinates representing a navigation plan
-    <2> Array of all spaces on the board deemed to be "clear"
-  Returns true if all coordinates in planSpaces also match a coordinate pair in clearSpaces
-  Else returns false
-
+    <1> x, y coordinates
+    <2> x, y coordinates
+  Returns true if the coordinates are the same, else returns false
 */
-function checkPlan(planSpaces, clearSpaces){
-  console.log('>--Entering checkPlan()');
-  if(planSpaces.length == 0){ // no planned route exists?
-    console.log('<--Exiting checkPlan() = FALSE');
-    return false;
+
+function areAdjacent(coordinates_a, coordinates_b){
+  console.log('>--Entering areAdjacent()');
+  if(coordinates_a.x == coordinates_b.x - 1 && coordinates_a.y == coordinates_b.y){
+    console.log('<--Exiting areAdjacent() = TRUE');
+    return true;
   }
-  for(var i = 0; i < planSpaces.length; i++){
-    if(!isClear(planSpaces[i], clearSpaces)){ // found an obstructed space?
-      console.log('<--Exiting checkPlan() = FALSE');
-      return false;
-    }
+  else if(coordinates_a.x == coordinates_b.x + 1 &&  coordinates_a.y == coordinates_b.y){
+    console.log('<--Exiting areAdjacent() = TRUE');
+    return true;
   }
-
-  // no obstructed spaces on planned route found?
-  console.log('<--Exiting checkPlan() = TRUE');
-  return true;
-}
-
-
-/* function timeToEat
-  Parameter:
-    <1> Snake object representing self
-  Returns true if your snake needs to make locating food a priority
-  Else returns false
-*/
-function timeToEat(snake){
-  console.log('>--Inside timeToEat()');
-  if(snake.health < HUNGRY_TIME){
-    console.log('>>--Exiting timeToEat() - snek is hungry');
+  else if(coordinates_a.x == coordinates_b.x && coordinates_a.y == coordinates_b.y + 1){
+    console.log('<--Exiting areAdjacent() = TRUE');
+    return true;
+  }
+  else if(coordinates_a.x == coordinates_b.x && coordinates_a.y == coordinates_b.y - 1){
+    console.log('<--Exiting areAdjacent() = TRUE');
     return true;
   }
 
-  console.log('>--Exiting timeToEat() - snek is not hungry');
-  return false;
-}
-
-/*  function sameCoordinates
-
-  Returns true if two sets of coordinates are the same
-  Else returns false
-
-  Precondition: both coordinates must have attributes 'x' and 'y'
-*/
-function sameCoordinates(space_a, space_b){
-  console.log('>--Entering sameCoordinates()');
-  if(space_a.x == space_b.x && space_a.y == space_b.y){
-    ('<--Exiting sameCoordinates() = TRUE');
-    return true;
-  }
-
-  console.log('<--Exiting sameCoordinates() = FALSE');
+  console.log('<--Exiting areAdjacent() = FALSE');
   return false;
 }
 
@@ -495,29 +556,42 @@ function buildClearSpaceArray(board){
   return clearSpaces;
 }
 
-function areAdjacent(coordinates_a, coordinates_b){
-  console.log('>--Entering areAdjacent()');
-  if(coordinates_a.x == coordinates_b.x - 1 && coordinates_a.y == coordinates_b.y){
-    console.log('<--Exiting areAdjacent() = TRUE');
-    return true;
+function buildOtherSnakesArray(gameData){
+  var snakeArray = new Array;
+  for(var i = 0; i < gameData.board.snakes.length; i++){
+    if(!gameData.board.snakes[i].id == mySnake.id){
+      snakeArray.push(gameData.board.snakes[i]);
+    }
   }
-  else if(coordinates_a.x == coordinates_b.x + 1 &&  coordinates_a.y == coordinates_b.y){
-    console.log('<--Exiting areAdjacent() = TRUE');
-    return true;
+  return snakeArray;
+};
+
+/* function checkPlan
+
+  Parameters:
+    <1> Array of coordinates representing a navigation plan
+    <2> Array of all spaces on the board deemed to be "clear"
+  Returns true if all coordinates in planSpaces also match a coordinate pair in clearSpaces
+  Else returns false
+
+*/
+function checkPlan(planSpaces, clearSpaces){
+  console.log('>--Entering checkPlan()');
+  if(planSpaces.length == 0){ // no planned route exists?
+    console.log('<--Exiting checkPlan() = FALSE');
+    return false;
   }
-  else if(coordinates_a.x == coordinates_b.x && coordinates_a.y == coordinates_b.y + 1){
-    console.log('<--Exiting areAdjacent() = TRUE');
-    return true;
-  }
-  else if(coordinates_a.x == coordinates_b.x && coordinates_a.y == coordinates_b.y - 1){
-    console.log('<--Exiting areAdjacent() = TRUE');
-    return true;
+  for(var i = 0; i < planSpaces.length; i++){
+    if(!isClear(planSpaces[i], clearSpaces)){ // found an obstructed space?
+      console.log('<--Exiting checkPlan() = FALSE');
+      return false;
+    }
   }
 
-  console.log('<--Exiting areAdjacent() = FALSE');
-  return false;
+  // no obstructed spaces on planned route found?
+  console.log('<--Exiting checkPlan() = TRUE');
+  return true;
 }
-
 
 /*  function isClear
   Checks if a single space is on the list of unobstructed spaces
@@ -540,26 +614,103 @@ function isClear(checkSpace, clearSpaces){
   return false;
 }
 
-/*  function nextToSnakeHead
+/* function nextToSnakeHead
 
-  Returns true if the coordinate supplied is next to a snake head
-  Else returns false
-  Parameters
-    <1> Array containing the other snakes
+  Parameters:
+    <1> Coordinate pair for space being investigated
+    <2> Array of snakes besides the user
+    <3> The user's snake
 
+  Returns true if there is a snake of equal or greater size next to coordinates
+  Returns false if there is no adjacent snake OR the snake is smaller and weaker
 */
 
-function nextToSnakeHead(coordinates, otherSnakes){
+
+function nextToSnakeHead(coordinates, otherSnakes, userSnake){
   console.log('>--Entering nextToSnakeHead');
   console.log('--Coordinates checked: ' + coordinates.x + ', ' + coordinates.y);
   for(var i = 0; i < otherSnakes.length; i++){
     if(areAdjacent(coordinates, otherSnakes[i].head)){
-      console.log('<--Exiting nextToSnakeHead() = TRUE');
-      return true;
+      if(otherSnakes[i].length >= userSnake.length){
+        console.log('<--Exiting nextToSnakeHead() = TRUE');
+        return true;
+      }
     }
   }
 
-  console.log('<--Exiting nextToSnakeHead() = FALSE');
+  console.log('<--Exiting nextToSnakeHead() = FALSE (if there is a snake, it is smaller)');
+  return false;
+}
+
+/* function numberOfExits()
+
+  Takes a space and returns the number of valid exits from it
+  Parameters:
+    <1> Array of x, y coordinate pairs including:
+      .upLocation
+      .downLocation
+      .leftLocation
+      .rightLocation
+    <2> Game information object sent in move request including:
+      .otherSnakes: the array of other snakes
+      .clearSpaces: the array of empty spaces
+      .userSnake: the user's snake
+
+
+*/
+function numberOfExits(coordinatesArray, gameData){
+  console.log('>--Entering numberOfExits()');
+  if(coordinatesArray.length > 4 || coordinatesArray.length < 0){
+    console.log('ERROR: coordinates Array size invalid - ' + coordinatesArray.length);
+    console.log('<--Exiting numberOfExits() = -1');
+    return -1;
+  }
+
+  var exits = 0;
+  var otherSnakes = gameData.otherSnakes;
+  var clearSpaces = gameData.clearSpaces;
+  var userSnake = gameData.userSnake;
+
+  if(isClear(coordinatesArray.upLocation, clearSpaces)){
+    if(!nextToSnakeHead(coordinatesArray.upLocation, otherSnakes, userSnake)){
+      exits++;
+    }
+  }
+  if(isClear(coordinatesArray.downLocation, clearSpaces)){
+    if(!nextToSnakeHead(coordinatesArray.downLocation, otherSnakes, userSnake)){
+      exits++;
+    }
+  }
+  if(isClear(coordinatesArray.leftLocation, clearSpaces)){
+    if(!nextToSnakeHead(coordinatesArray.leftLocation, otherSnakes, userSnake)){
+      exits++;
+    }
+  }
+  if(isClear(coordinatesArray.rightLocation, clearSpaces)){
+    if(!nextToSnakeHead(coordinatesArray.rightLocation, otherSnakes, userSnake)){
+      exits++;
+    }
+  }
+
+  console.log('<--Exiting numberOfExits() = ' + exits);
+  return exits;
+}
+
+/*  function sameCoordinates
+
+  Returns true if two sets of coordinates are the same
+  Else returns false
+
+  Precondition: both coordinates must have attributes 'x' and 'y'
+*/
+function sameCoordinates(space_a, space_b){
+  console.log('>--Entering sameCoordinates()');
+  if(space_a.x == space_b.x && space_a.y == space_b.y){
+    ('<--Exiting sameCoordinates() = TRUE');
+    return true;
+  }
+
+  console.log('<--Exiting sameCoordinates() = FALSE');
   return false;
 }
 
@@ -589,5 +740,22 @@ function spaceOccupied(checkSpace, board){
     }
   }
   console.log('<--Exiting spaceOccupied() = FALSE');
+  return false;
+}
+
+/* function timeToEat
+  Parameter:
+    <1> Snake object representing self
+  Returns true if your snake needs to make locating food a priority
+  Else returns false
+*/
+function timeToEat(snake){
+  console.log('>--Inside timeToEat()');
+  if(snake.health < HUNGRY_TIME){
+    console.log('>>--Exiting timeToEat() - snek is hungry');
+    return true;
+  }
+
+  console.log('>--Exiting timeToEat() - snek is not hungry');
   return false;
 }
