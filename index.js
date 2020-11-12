@@ -525,7 +525,7 @@ function isClear(checkSpace, clearSpaces){
 
 function nextToSnakeHead(coordinates, otherSnakes){
   console.log('>--Entering nextToSnakeHead');
-  console.log('--Coordinates checked: ' + coordinates.x + '\, ' coordinates.y);
+  console.log('--Coordinates checked: ' + coordinates.x + ', ' + coordinates.y);
   for(var i = 0; i < otherSnakes.length; i++){
     if(areAdjacent(coordinates, otherSnakes[i].head)){
       console.log('<--Exiting nextToSnakeHead() = TRUE');
@@ -546,7 +546,7 @@ function nextToSnakeHead(coordinates, otherSnakes){
 */
 function spaceOccupied(checkSpace, board){
   console.log('>--Entering spaceOccupied()');
-  console.log('--Coordinates checked: ' + checkSpace.x + '\, ' checkSpace.y);
+  console.log('--Coordinates checked: ' + checkSpace.x + ', ' + checkSpace.y);
 
   for(var i = 0; i < board.hazards.length; i++){
     if(checkSpace.x == board.hazards[i].x && checkSpace.y == board.hazards[i].y){;
