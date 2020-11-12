@@ -30,7 +30,7 @@ var directions = new Array;
 // http request handler functions
 
 function handleIndex(request, response) {
-  var timestamp = Date.now();
+  var timestamp = new Date();
   console.log('====>Time: ' + timestamp.getDate() + '/' + (timestamp.getMonth() + 1) + '/' + timestamp.getFullYear() + ' ' + timestamp.getHours() + ':' + timestamp.getMinutes() + ':' + timestamp.getSeconds());
   console.log('>>New HTTP request; entering handleIndex()');
   var battlesnakeInfo = {
@@ -57,7 +57,7 @@ function handleStart(request, response) {
 }
 
 function handleMove(request, response) {
-  var timestamp = Date.now();
+  var timestamp = new Date();
   console.log('====>Time: ' + timestamp.getDate() + '/' + (timestamp.getMonth() + 1) + '/' + timestamp.getFullYear() + ' ' + timestamp.getHours() + ':' + timestamp.getMinutes() + ':' + timestamp.getSeconds());
   console.log('>>New HTTP request; entering handleMove()');
 
@@ -255,7 +255,7 @@ function handleMove(request, response) {
 }
 
 function handleEnd(request, response) {
-  var timestamp = Date.now();
+  var timestamp = new Date();
   console.log('====>Time: ' + timestamp.getDate() + '/' + (timestamp.getMonth() + 1) + '/' + timestamp.getFullYear() + ' ' + timestamp.getHours() + ':' + timestamp.getMinutes() + ':' + timestamp.getSeconds());
   console.log('>>Entering handleEnd()');
   var gameData = request.body
