@@ -184,7 +184,7 @@ function handleMove(request, response) {
 
     if(possibleMoves.includes('up')){
       if(nextToSnakeHead(upLocation, otherSnakes)){
-        console.log('-- ' + upLocation.x + ', ' + upLocation.y' + ' is adjacent to a snake head');
+        console.log('-- ' + upLocation.x + ', ' + upLocation.y + ' is adjacent to a snake head');
         possibleMoves.pop('up');
         changeMade = true;
       }
