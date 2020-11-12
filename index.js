@@ -179,31 +179,49 @@ function handleMove(request, response) {
   // if multiple options, eliminate ones close to other snakes' heads
 
   while(possibleMoves.length > 1){
+    console.log('--Checking if spaces adjacent to snake heads');
     var changeMade = false;
 
     if(possibleMoves.includes('up')){
       if(nextToSnakeHead(upLocation, otherSnakes)){
+        console.log('-- ' + upLocation.x + ', ' + upLocation.y' + ' is adjacent to a snake head');
         possibleMoves.pop('up');
+        changeMade = true;
       }
     }
     else if(possibleMoves.includes('down')){
       if(nextToSnakeHead(downLocation, otherSnakes)){
+        console.log('-- ' + downLocation.x + ', ' + downLocation.y' + ' is adjacent to a snake head');
         possibleMoves.pop('down');
+        changeMade = true;
       }
     }
     else if(possibleMoves.includes('left')){
       if(nextToSnakeHead(leftLocation, otherSnakes)){
+        console.log('-- ' + leftLocation.x + ', ' + leftLocation.y' + ' is adjacent to a snake head');
         possibleMoves.pop('left');
+        changeMade = true;
       }
     }
     else if(possibleMoves.includes('right')){
       if(nextToSnakeHead(rightLocation, otherSnakes)){
+        console.log('-- ' + rightLocation.x + ', ' + rightLocation.y' + ' is adjacent to a snake head');
         possibleMoves.pop('right');
+        changeMade = true;
       }
     }
 
-    if(!changeMade)
+    if(!changeMade){
+      console.log('--Undesirable moves eliminated');
+      console.log('--Contents of move array:');
+      for(var i = 0; i < possibleMoves.length; i++){
+        console.log(possibleMoves[i]);
+      }
       break;
+    }
+    else{
+      console.log('--Move array reduced. Checking if further reduction possible.')
+    }
   }
 
 
