@@ -1,3 +1,11 @@
+/*  Grabthar's Hammer
+
+A Battlesnake by Mikeybassoon
+
+Based on the official JS/Node Starter Snake 
+*/
+
+
 const bodyParser = require('body-parser')
 const express = require('express')
 
