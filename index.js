@@ -1,8 +1,10 @@
+/*  Grabthar's Hammer
+
+A Battlesnake by Mikeybassoon, but more object oriented this time!
+*/
+
 const bodyParser = require('body-parser')
 const express = require('express')
-const boardAnalyzer = require('./board.js');
-const game = require('./game.js');
-const initializer = require('./initializer.js');
 
 const PORT = process.env.PORT || 3000
 
@@ -45,7 +47,7 @@ function handleStart(request, response) {
 
 function handleMove(request, response) {
   var gameData = request.body;
-  
+
 
 
 
