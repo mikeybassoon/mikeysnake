@@ -251,7 +251,7 @@ function handleMove(request, response) {
   var gameDataObject = function(){
     var otherSnakes = [...otherSnakes];
     var userSnake = mySnake;
-    var clearSpaces = openSpaces;
+    var clearSpaces = [...openSpaces];
   };
 
 
