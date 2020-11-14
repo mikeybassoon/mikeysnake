@@ -40,7 +40,7 @@ var directions = new Array;
 function handleIndex(request, response) {
   var timestamp = new Date();
   console.log('====>Time: ' + timestamp.getDate() + '/' + (timestamp.getMonth() + 1) + '/' + timestamp.getFullYear() + ' ' + timestamp.getHours() + ':' + timestamp.getMinutes() + ':' + timestamp.getSeconds());
-  console.log('>>New HTTP request; entering handleIndex()');
+  console.log('>>Receiving HTTP request (index); entering handleIndex()');
   var battlesnakeInfo = {
     apiversion: '1',
     author: 'mikeybassoon',
@@ -56,7 +56,7 @@ function handleIndex(request, response) {
 function handleStart(request, response) {
   var timestamp = new Date();
   console.log('====>Time: ' + timestamp.getDate() + '/' + (timestamp.getMonth() + 1) + '/' + timestamp.getFullYear() + ' ' + timestamp.getHours() + ':' + timestamp.getMinutes() + ':' + timestamp.getSeconds());
-  console.log('>>New HTTP request; entering handleStart()');
+  console.log('>>Receiving HTTP request (start); entering handleStart()');
   var gameData = request.body
 
   console.log('START')
@@ -67,7 +67,7 @@ function handleStart(request, response) {
 function handleMove(request, response) {
   var timestamp = new Date();
   console.log('====>Time: ' + timestamp.getDate() + '/' + (timestamp.getMonth() + 1) + '/' + timestamp.getFullYear() + ' ' + timestamp.getHours() + ':' + timestamp.getMinutes() + ':' + timestamp.getSeconds());
-  console.log('>>New HTTP request; entering handleMove()');
+  console.log('>>Receiving HTTP request (move); entering handleMove()');
 
   var gameData = request.body;
   var board = gameData.board;
@@ -185,6 +185,10 @@ function handleMove(request, response) {
 
   // if multiple options, eliminate ones that are less desirable
   while(possibleMoves.length > 1){
+    // randomize order of possible moves to avoid predictable behaviour
+    possibleMoves.sort(function(a, b){return 0.5 - Math.random()});
+
+
     console.log('--Checking if spaces adjacent to snake heads');
     var changeMade = false;
 
@@ -228,7 +232,10 @@ function handleMove(request, response) {
     else{
       console.log('--Move array reduced. Checking if further reduction possible.')
     }
-  }
+
+
+
+  } // end while loop
 
   // check remaining available spaces for number of exits
   var mostExits = 0;
