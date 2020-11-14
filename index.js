@@ -255,7 +255,10 @@ function handleMove(request, response) {
   };
 
 
-
+  console.log('Current array of empty spaces: ');
+  for(var i = 0; i < gameDataObject.clearSpaces.length; i++){
+    console.log(gameDataObject.clearSpaces[i].x + ', ' gameDataObject.clearSpaces[i].y);
+  }
 
   // loop until no more moves can be eliminated
   console.log('Testing number of escape routes to eliminate possibilities');
