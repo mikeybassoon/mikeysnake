@@ -346,7 +346,7 @@ function handleMove(request, response) {
   var move; // text string for http response
 
   // execute appropriate behaviour for strategy
-  move = executeStrategy(strategy, possibleMoves, gameID);
+  move = executeStrategy(strategy, gameData, possibleMoves);
 
 
 
@@ -357,6 +357,9 @@ function handleMove(request, response) {
     move: move
   })
   console.log('<<HTTP response sent');
+  var exitTime = new Date();
+  var processingTime = exitTime - timestamp;
+  console.log('==Request time: ' + processingTime);
 }
 
 function handleEnd(request, response) {
@@ -401,11 +404,13 @@ function randomMove(availableMoves){
   Given a text string with a valid strategy, executes it
   Parameters
     <1> strategy <string>
-    <2> array of possible moves
-    <3> game ID string
+    <2> Game data object
+    <3> Array of possible moves
   Returns a valid move (left, right, up, down)
 */
-function executeStrategy(strategy, possibleMoves, gameID){
+function executeStrategy(strategy, gameObject, possibleMoves){
+  var gameID = gameObject.game.id;
+
   console.log('>--Entering executeStrategy()');
   var move;
 
@@ -450,10 +455,17 @@ function executeStrategy(strategy, possibleMoves, gameID){
     console.log('Next move in plan: ' + move);
   }
   else if(strategy =='findFood'){
+    var foodInstances = gameObject.board.food;
 
-    /*  NOTE - this is placeholder code. The findFood algorithm is not yet written.
+    // find closest food
 
-    */
+    // first food in list is closest by default
+    var distanceToTarget = distanceBetween(currentCoordinates, foodInstances[0]);
+    var target = foodInstances[0];
+    // locate closest food source
+    for(var i = 0; i < foodInstances.length; i++){
+
+    }
 
     if(possibleMoves.length == 0){ // no legal moves?
       console.log('--No legal move available - performing default move');
