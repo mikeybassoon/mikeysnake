@@ -74,9 +74,9 @@ function handleMove(request, response) {
   var gameID = gameData.game.id;
   var mySnake = gameData.you; // info about player's snake
   var hungry = timeToEat(mySnake);
-  var openSpaces = buildClearSpaceArray(board); // array of unobstructed spaces
+  var openSpaces = [...buildClearSpaceArray(board)]; // array of unobstructed spaces
   var foodSpaces = board.food;
-  var otherSnakes = buildOtherSnakesArray(gameData);
+  var otherSnakes = [...buildOtherSnakesArray(gameData)];
 
 
   /* var strategy
