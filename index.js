@@ -639,7 +639,7 @@ function nextToSnakeHead(coordinates, otherSnakes, userSnake){
   console.log('--Coordinates checked: ' + coordinates.x + ', ' + coordinates.y);
   console.log('--Coordinates of snakes:');
   for(var i = 0; i < otherSnakes.length; i++){
-    console.log('{' + otherSnakes[i].head.x + ', ' + otherSnakes[i].head.y + });
+    console.log('{' + otherSnakes[i].head.x + ', ' + otherSnakes[i].head.y + '}');
   }
   for(var i = 0; i < otherSnakes.length; i++){
     if(areAdjacent(coordinates, otherSnakes[i].head)){
