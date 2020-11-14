@@ -2,7 +2,7 @@
 
 A Battlesnake by Mikeybassoon
 
-Based on the official JS/Node Starter Snake 
+Based on the official JS/Node Starter Snake
 */
 
 
@@ -637,8 +637,13 @@ function isClear(checkSpace, clearSpaces){
 function nextToSnakeHead(coordinates, otherSnakes, userSnake){
   console.log('>--Entering nextToSnakeHead');
   console.log('--Coordinates checked: ' + coordinates.x + ', ' + coordinates.y);
+  console.log('--Coordinates of snakes:');
+  for(var i = 0; i < otherSnakes.length; i++){
+    console.log('{' + otherSnakes[i].head.x + ', ' + otherSnakes[i].head.y + });
+  }
   for(var i = 0; i < otherSnakes.length; i++){
     if(areAdjacent(coordinates, otherSnakes[i].head)){
+      console.log('--Checking snake ' + (i + 1));
       if(otherSnakes[i].length >= userSnake.length){
         console.log('<--Exiting nextToSnakeHead() = TRUE');
         return true;
