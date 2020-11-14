@@ -248,11 +248,12 @@ function handleMove(request, response) {
   };
 
   // package game data required by number of exits function
-  var gameDataObject = {
-    'otherSnakes': otherSnakes,
-    'userSnake': mySnake,
-    'clearSpaces': openSpaces
-  };
+  var gameDataObject;
+  gameDataObject.otherSnakes = otherSnakes;
+  gameDataObject.userSnake = mySnake;
+  gameDataObject.clearSpaces = openSpaces;
+
+
 
   // loop until no more moves can be eliminated
   console.log('Testing number of escape routes to eliminate possibilities');
