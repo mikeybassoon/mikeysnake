@@ -249,9 +249,9 @@ function handleMove(request, response) {
 
   // package game data required by number of exits function
   var gameDataObject = function(){
-    this->otherSnakes = otherSnakes;
-    this->userSnake = mySnake;
-    this->clearSpaces = openSpaces;
+    var otherSnakes = otherSnakes;
+    var userSnake = mySnake;
+    var clearSpaces = openSpaces;
   };
 
 
