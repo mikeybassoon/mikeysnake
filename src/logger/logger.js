@@ -9,9 +9,11 @@ const fs = require('fs');
 
 
 
-module.exports = {
+module.exports = function() {
 
-  filenameTable = new Array,
+  var filenameTable = new Array,
+
+  // FUNCTIONS
 
   /* function createLogFile
 
