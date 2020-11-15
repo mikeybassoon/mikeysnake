@@ -7,8 +7,11 @@
 
 const fs = require('fs');
 
+
+
 module.exports = {
-  var filenameTable = new Array,
+
+  'filenameTable': [],
 
   /* function createLogFile
 
@@ -32,8 +35,6 @@ module.exports = {
       console.log(`An error occurred while creating log file for ${gameID}:`);
       console.log(err);
     }
-
-
   },
 
   /* function log
