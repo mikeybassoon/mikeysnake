@@ -95,7 +95,8 @@ function handleMove(request, response) {
       findFood
       followPlan
   */
-  var strategy = 'default';
+  var strategy = 'default';  // value may be changed by a strategy-setting function
+
 
   // get current movement plan
   var movementPlan = function(){
@@ -116,7 +117,7 @@ function handleMove(request, response) {
     }
     else{
       console.log('--No valid plan available. Building a new one.');
-      strategy = 'default';
+      strategy = 'default'; // NOTE - currently no code to build a new plan...
     }
   }
   else{ // snake is hungry?
@@ -124,7 +125,7 @@ function handleMove(request, response) {
     strategy = 'findFood';
   }
 
-
+  console.log('Strategy set to ' + strategy);
 
 
 
@@ -166,24 +167,28 @@ function handleMove(request, response) {
   // identify available spaces to move into
 
   // up?
+  console.log(`--Checking if up (${upLocation.x}, ${upLocation.y}) is valid`);
   if(isClear(upLocation, openSpaces)){
     console.log('--Up is valid direction');
     possibleMoves.push('up');
   }
 
   // left?
+  console.log(`--Checking if up (${leftLocation.x}, ${leftLocation.y}) is valid`);
   if(isClear(leftLocation, openSpaces)){
     console.log('--Left is valid direction');
     possibleMoves.push('left');
   }
 
   // down?
+  console.log(`--Checking if up (${downLocation.x}, ${downLocation.y}) is valid`);
   if(isClear(downLocation, openSpaces)){
     console.log('--Down is valid direction');
     possibleMoves.push('down');
   }
 
   // right?
+  console.log(`--Checking if up (${rightLocation.x}, ${rightLocation.y}) is valid`);
   if(isClear(rightLocation, openSpaces)){
     console.log('--Right is valid direction');
     possibleMoves.push('right');
@@ -199,6 +204,7 @@ function handleMove(request, response) {
     var changeMade = false;
 
     if(possibleMoves.includes('up')){
+      console.log('--Checking if up is adjacent to a snake head');
       if(nextToSnakeHead(upLocation, otherSnakes, mySnake)){
         console.log('-- ' + upLocation.x + ', ' + upLocation.y + ' is adjacent to a snake head');
         possibleMoves.pop('up');
@@ -206,6 +212,7 @@ function handleMove(request, response) {
       }
     }
     else if(possibleMoves.includes('down')){
+      console.log('--Checking if down is adjacent to a snake head');
       if(nextToSnakeHead(downLocation, otherSnakes, mySnake)){
         console.log('-- ' + downLocation.x + ', ' + downLocation.y + ' is adjacent to a snake head');
         possibleMoves.pop('down');
@@ -213,6 +220,7 @@ function handleMove(request, response) {
       }
     }
     else if(possibleMoves.includes('left')){
+      console.log('--Checking if left is adjacent to a snake head');
       if(nextToSnakeHead(leftLocation, otherSnakes, mySnake)){
         console.log('-- ' + leftLocation.x + ', ' + leftLocation.y + ' is adjacent to a snake head');
         possibleMoves.pop('left');
@@ -220,6 +228,7 @@ function handleMove(request, response) {
       }
     }
     else if(possibleMoves.includes('right')){
+      console.log('--Checking if right is adjacent to a snake head');
       if(nextToSnakeHead(rightLocation, otherSnakes, mySnake)){
         console.log('-- ' + rightLocation.x + ', ' + rightLocation.y + ' is adjacent to a snake head');
         possibleMoves.pop('right');
@@ -228,7 +237,7 @@ function handleMove(request, response) {
     }
 
     if(!changeMade){
-      console.log('--Undesirable moves eliminated');
+      console.log('--No more undesireable moves to eliminate');
       console.log('--Contents of move array:');
       for(var i = 0; i < possibleMoves.length; i++){
         console.log(possibleMoves[i]);
@@ -255,9 +264,9 @@ function handleMove(request, response) {
 
   // package game data required by number of exits function
   var gameDataObject = function(){
-    var otherSnakes = [...otherSnakes];
-    var userSnake = mySnake;
-    var clearSpaces = [...openSpaces];
+    otherSnakes: [...otherSnakes],
+    userSnake: mySnake,
+    clearSpaces: [...openSpaces]
   };
 
 
