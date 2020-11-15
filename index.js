@@ -60,16 +60,18 @@ function handleStart(request, response) {
   printTime(timestamp);
   console.log('>>Receiving HTTP request (start); entering handleStart()');
   var gameData = request.body
+  var gameID = gameData.game.id;
 
-  console.log('START')
+  logger.createLogFile(gameID);
+  logger.log(gameID, printTime(timestamp));
+  logger.log(gameID, 'START');
   response.status(200).send('ok')
   console.log('<<HTTP response sent');
 }
 
 function handleMove(request, response) {
   var timestamp = new Date();
-  printTime(timestamp);
-  console.log('>>Receiving HTTP request (move); entering handleMove()');
+  logger.log(gameID, printTime(timestamp));
 
   var gameData = request.body;
   var board = gameData.board;
@@ -386,15 +388,15 @@ function handleMove(request, response) {
 
 function handleEnd(request, response) {
   var timestamp = new Date();
-  console.log('====>Time: ' + timestamp.getDate() + '/' + (timestamp.getMonth() + 1) + '/' + timestamp.getFullYear() + ' ' + timestamp.getHours() + ':' + timestamp.getMinutes() + ':' + timestamp.getSeconds());
+  console.log(printTime(timestamp));
   console.log('>>Entering handleEnd()');
   var gameData = request.body
+  var gameID = gameData.game.id;
 
   console.log('END')
   response.status(200).send('ok')
   console.log('<<HTTP response sent');
-
-  // future - clean out arrays!
+  log(gameID, 'END OF GAME\n\n');
 }
 
 
