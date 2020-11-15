@@ -20,7 +20,7 @@ module.exports = function() {
     Parameters:
       <1> Game ID
   */
-  createLogFile: (gameID)=> {
+  function createLogFile(gameID){
     var timestamp = new Date(); // get current time
     var filename = timestamp + '.txt'; // use timestamp as filename
     try{
@@ -48,7 +48,7 @@ module.exports = function() {
     Appends the parameter string to the log file for this game
   */
 
-  log: (gameID, logString)=> {
+  function log(gameID, logString){
     var filename = filenameTable[gameID];
     var outputString = '--' + logString + '\n';
     try{
@@ -69,7 +69,7 @@ module.exports = function() {
     Appends the parameter string to the log file for this game
   */
 
-  logError: (gameID, logString)=> {
+  function logError(gameID, logString) {
     var filename = filenameTable[gameID];
     var outputString = '!!ERROR: ' + logString + '\n';
     try{
@@ -90,7 +90,7 @@ module.exports = function() {
     Appends the parameter string to the log file for this game
   */
 
-  logFunctionEntrance: (gameID, logString)=> {
+  function logFunctionEntrance(gameID, logString){
     var filename = filenameTable[gameID];
     var outputString = '>-' + logString + '\n';
     try{
@@ -111,7 +111,7 @@ module.exports = function() {
     Appends the parameter string to the log file for this game
   */
 
-  logFunctionExit: (gameID, logString)=> {
+  function logFunctionExit(gameID, logString) {
     var filename = filenameTable[gameID];
     var outputString = '<-' + logString + '\n';
     try{
