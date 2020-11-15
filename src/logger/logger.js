@@ -9,12 +9,11 @@ const fs = require('fs');
 
 
 
-module.exports = function() {
+module.exports = function(){
 
-  var filenameTable = new Array,
+  var filenameTable = new Array;
 
-
-};
+}
 
 // FUNCTIONS
 
