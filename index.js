@@ -39,7 +39,8 @@ var directions = new Array;
 
 function handleIndex(request, response) {
   var timestamp = new Date();
-  console.log('====>Time: ' + timestamp.getDate() + '/' + (timestamp.getMonth() + 1) + '/' + timestamp.getFullYear() + ' ' + timestamp.getHours() + ':' + timestamp.getMinutes() + ':' + timestamp.getSeconds());
+  printTime(timestamp);
+
   console.log('>>Receiving HTTP request (index); entering handleIndex()');
   var battlesnakeInfo = {
     apiversion: '1',
@@ -55,7 +56,7 @@ function handleIndex(request, response) {
 
 function handleStart(request, response) {
   var timestamp = new Date();
-  console.log('====>Time: ' + timestamp.getDate() + '/' + (timestamp.getMonth() + 1) + '/' + timestamp.getFullYear() + ' ' + timestamp.getHours() + ':' + timestamp.getMinutes() + ':' + timestamp.getSeconds());
+  printTime(timestamp);
   console.log('>>Receiving HTTP request (start); entering handleStart()');
   var gameData = request.body
 
@@ -66,7 +67,7 @@ function handleStart(request, response) {
 
 function handleMove(request, response) {
   var timestamp = new Date();
-  console.log('====>Time: ' + timestamp.getDate() + '/' + (timestamp.getMonth() + 1) + '/' + timestamp.getFullYear() + ' ' + timestamp.getHours() + ':' + timestamp.getMinutes() + ':' + timestamp.getSeconds());
+  printTime(timestamp);
   console.log('>>Receiving HTTP request (move); entering handleMove()');
 
   var gameData = request.body;
@@ -77,6 +78,11 @@ function handleMove(request, response) {
   var openSpaces = [...buildClearSpaceArray(board)]; // array of unobstructed spaces
   var foodSpaces = board.food;
   var otherSnakes = [...buildOtherSnakesArray(gameData)];
+
+  console.log('Checking array functions');
+  console.log('Size of openSpaces array: ' + openSpaces.length);
+  console.log('Size of foodSpaces array: ' + foodSpaces.length);
+  console.log('Size of otherSnakes array: ' + otherSnakes.length);
 
 
   /* var strategy
@@ -733,6 +739,17 @@ function numberOfExits(coordinatesArray, gameData){
   console.log('<--Exiting numberOfExits() = ' + exits);
   return exits;
 }
+
+/* function printTime
+
+  Takes a JS Date object and prints a formatted date and time to console
+  Parameters:
+    <1> Date object
+*/
+function printTime(time){
+  console.log('====>Time: ' + time.getDate() + '/' + (time.getMonth() + 1) + '/' + time.getFullYear() + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds());
+}
+
 
 /*  function sameCoordinates
 
