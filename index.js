@@ -263,7 +263,7 @@ function handleMove(request, response) {
   };
 
   // package game data required by number of exits function
-  var gameDataObject = function(){
+  var gameDataObject = {
     'otherSnakes': [...otherSnakes],
     'userSnake': mySnake,
     'clearSpaces': [...openSpaces]
