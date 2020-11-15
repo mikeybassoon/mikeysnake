@@ -22,7 +22,7 @@ module.exports = function(){
   Parameters:
     <1> Game ID
 */
-function exports.createLogFile(gameID){
+function createLogFile(gameID){
   var timestamp = new Date(); // get current time
   var filename = timestamp + '.txt'; // use timestamp as filename
   try{
@@ -50,7 +50,7 @@ function exports.createLogFile(gameID){
   Appends the parameter string to the log file for this game
 */
 
-function.exports log(gameID, logString){
+function log(gameID, logString){
   var filename = filenameTable[gameID];
   var outputString = '--' + logString + '\n';
   try{
@@ -71,7 +71,7 @@ function.exports log(gameID, logString){
   Appends the parameter string to the log file for this game
 */
 
-function.exports logError(gameID, logString) {
+function logError(gameID, logString) {
   var filename = filenameTable[gameID];
   var outputString = '!!ERROR: ' + logString + '\n';
   try{
@@ -92,14 +92,14 @@ function.exports logError(gameID, logString) {
   Appends the parameter string to the log file for this game
 */
 
-function.exports logFunctionEntrance(gameID, logString){
+function logFunctionEntrance(gameID, logString){
   var filename = filenameTable[gameID];
   var outputString = '>-' + logString + '\n';
   try{
     fs.appendFileSync(filename, outputString);
   }
   catch(err){
-    console.log(`Log operation failed.`);
+    console.log(`Log operation raised error`);
     console.log(err);
   }
 },
@@ -113,14 +113,14 @@ function.exports logFunctionEntrance(gameID, logString){
   Appends the parameter string to the log file for this game
 */
 
-function.exports logFunctionExit(gameID, logString) {
+function logFunctionExit(gameID, logString) {
   var filename = filenameTable[gameID];
   var outputString = '<-' + logString + '\n';
   try{
     fs.appendFileSync(filename, outputString);
   }
   catch(err){
-    console.log(`Log operation failed.`);
+    console.log(`Log operation raised error`);
     console.log(err);
   }
 }
