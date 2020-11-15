@@ -39,7 +39,7 @@ function createLogFile(gameID){
     console.log(`An error occurred while creating log file for ${gameID}:`);
     console.log(err);
   }
-},
+}
 
 /* function log
 
@@ -60,7 +60,7 @@ function log(gameID, logString){
     console.log(`Log operation failed.`);
     console.log(err);
   }
-},
+}
 
 /* function logError
 
@@ -81,7 +81,7 @@ function logError(gameID, logString) {
     console.log(`Log operation failed.`);
     console.log(err);
   }
-},
+}
 
 /* function logFunctionEntrance
 
@@ -102,7 +102,7 @@ function logFunctionEntrance(gameID, logString){
     console.log(`Log operation raised error`);
     console.log(err);
   }
-},
+}
 
 /* function logFunctionExit
 
