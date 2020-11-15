@@ -13,7 +13,7 @@ module.exports = function(){
 
   var filenameTable = new Array;
 
-}
+};
 
 // FUNCTIONS
 
@@ -22,7 +22,7 @@ module.exports = function(){
   Parameters:
     <1> Game ID
 */
-function.exports createLogFile(gameID){
+function exports.createLogFile(gameID){
   var timestamp = new Date(); // get current time
   var filename = timestamp + '.txt'; // use timestamp as filename
   try{
