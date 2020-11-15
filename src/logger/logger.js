@@ -19,12 +19,17 @@ module.exports = {
     var timestamp = new Date(); // get current time
     var filename = timestamp + '.txt'; // use timestamp as filename
     try{
-      fs.appendFileSync(filename, '$\n');
+      // package object
+      var record = {
+        'gameID': gameID,
+        'filename': filename
+      };
+      filenameTable.push(record);
+      fs.appendFileSync(filename, '\n');
       console.log(`Log file created for game ${gameID}`);
-      filenameTable[gameID] = filename; // store this filename in lookup table
     }
     catch(err){
-      console.log(`Log file creation for ${gameID} not successful.`);
+      console.log(`An error occurred while creating log file for ${gameID}:`);
       console.log(err);
     }
 
