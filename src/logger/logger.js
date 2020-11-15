@@ -11,7 +11,7 @@ const fs = require('fs');
 
 module.exports = {
 
-  'filenameTable': [],
+  filenameTable: [],
 
   /* function createLogFile
 
