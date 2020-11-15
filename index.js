@@ -8,7 +8,7 @@ Based on the official JS/Node Starter Snake
 
 const bodyParser = require('body-parser');
 const express = require('express');
-const.logger = require('./src/logger/logger.js');
+const logger = require('./src/logger/logger.js');
 
 const PORT = process.env.PORT || 3000
 
